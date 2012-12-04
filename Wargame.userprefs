@@ -1,18 +1,26 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Editor/PartyControllerEditor.cs">
+    <Files>
+      <File FileName="Assets/Scripts/HUD.cs" Line="24" Column="25" />
+      <File FileName="Assets/Scripts/PlayerController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Legs.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CameraController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/TargetableTerrain.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Editor/PartyControllerEditor.cs" Line="22" Column="97" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Assembly-CSharp" expanded="True">
+          <Node name="Assembly-CSharp" expanded="True" />
+          <Node name="Assembly-CSharp-Editor" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="TargetableTerrain.cs" selected="True" />
+                <Node name="Editor" expanded="True">
+                  <Node name="PartyControllerEditor.cs" selected="True" />
+                </Node>
               </Node>
             </Node>
-          </Node>
-          <Node name="Assembly-CSharp-Editor" expanded="True">
-            <Node name="Assets" expanded="True" />
           </Node>
         </State>
       </Pad>
