@@ -10,7 +10,7 @@ public class TargetableTerrain : MonoBehaviour {
 		
 		if (Physics.Raycast(ray, out hit)) {
 			
-			PlayerController.selectedCharacter.MoveToPosition(hit.point);
+			PartyController.instance.leader.Move(hit.point);
 			
 		}
 		

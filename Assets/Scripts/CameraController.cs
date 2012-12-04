@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour {
 	
 	public Transform target {
 		get {
-			return PlayerController.selectedCharacter.transform;
+			return PartyController.instance.leader.transform;
 		}
 	}
 	

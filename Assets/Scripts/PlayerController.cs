@@ -6,33 +6,11 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour {
 	
-	#region Hero management
-
-	public static List<PlayerController> characters = new List<PlayerController>();
-	public static PlayerController selectedCharacter;
-
-	public void Select() {
-		
-		selectedCharacter = this;
-		
-	}
-	
-	public int selectPriority;
-	
-	#endregion
-	
 	new public string name { get { return gameObject.name; } }
 	
 	void Awake() {
-		
-		characters.Add (this);
+
 		legs = GetComponent<Legs>();
-		
-		if (selectedCharacter == null) {
-			selectedCharacter = this;
-		} else if (selectPriority > selectedCharacter.selectPriority) {
-			selectedCharacter = this;
-		}
 		
 	}
 	
@@ -43,12 +21,16 @@ public class PlayerController : MonoBehaviour {
 	// right now, it's just Legs proxy
 	// however, there are likely player-specific checks to be implemented on this level
 	
-	public void MoveToPosition(Vector3 position) {
-		legs.MoveToPosition(position);
+	public void Move(Vector3 position) {
+		legs.Move(position);
 	}
 	
-	public void FollowTarget(Transform actor) {
-		legs.FollowTarget(actor);
+	public void Pursue(Transform actor) {
+		legs.Pursue(actor);
+	}
+	
+	public void Follow(Transform actor) {
+		legs.Follow(actor);
 	}
 	
 	public void Stop() {

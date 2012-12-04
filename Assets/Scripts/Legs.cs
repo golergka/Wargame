@@ -11,6 +11,7 @@ public class Legs : MonoBehaviour {
 	
 	public float targetReach = 0.5f;
 	public float targetClose = 1f;
+	public float targetFollow = 3f;
 	
 	#endregion
 	
@@ -23,7 +24,8 @@ public class Legs : MonoBehaviour {
 		
 		Idle,
 		MovingToPosition,
-		FollowingTarget,
+		PursuingTransform,
+		FollowingTransform,
 		
 	}
 	
@@ -33,16 +35,23 @@ public class Legs : MonoBehaviour {
 	
 	#region Public interface
 	
-	public void MoveToPosition(Vector3 position) {
+	public void Move(Vector3 position) {
 		
 		legsState = LegsState.MovingToPosition;
 		targetPosition = position;
 		
 	}
 	
-	public void FollowTarget(Transform actor) {
+	public void Pursue(Transform actor) {
 		
-		legsState = LegsState.FollowingTarget;
+		legsState = LegsState.PursuingTransform;
+		targetTransform = actor;
+		
+	}
+	
+	public void Follow(Transform actor) {
+		
+		legsState = LegsState.FollowingTransform;
 		targetTransform = actor;
 		
 	}
@@ -73,8 +82,14 @@ public class Legs : MonoBehaviour {
 		
 		// slowing down as we approach target closely
 		float distance = Vector3.Distance(transform.position, target);
-		if (distance < targetClose)
-			desiredVelocity *= distance / targetClose;
+		
+		float close = targetClose;
+		if (legsState == LegsState.FollowingTransform) {
+			close += targetFollow;
+		}
+		
+		if (distance < close)
+			desiredVelocity *= distance / close;
 		
 		characterController.SimpleMove (desiredVelocity);
 		
@@ -87,11 +102,10 @@ public class Legs : MonoBehaviour {
 		case LegsState.MovingToPosition:
 			return (Vector3.Distance(transform.position, targetPosition) < targetReach);
 			
-		case LegsState.FollowingTarget:
+		case LegsState.PursuingTransform:
 			return (Vector3.Distance(transform.position, targetTransform.position) < targetReach);
 			
-		default:
-			Debug.LogError("Unexpected legs state!");
+		default: // LegsState.FollowingTransform case
 			return false;
 			
 		}
@@ -108,17 +122,10 @@ public class Legs : MonoBehaviour {
 			return;
 		}
 		
-		switch (legsState) {
-			
-		case LegsState.MovingToPosition:
+		if (legsState == LegsState.MovingToPosition )
 			MoveTowards(targetPosition);
-			break;
-			
-		case LegsState.FollowingTarget:
+		else
 			MoveTowards(targetTransform.position);
-			break;
-			
-		}
 		
 	}
 	

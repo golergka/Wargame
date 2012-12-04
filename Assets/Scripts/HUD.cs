@@ -7,9 +7,9 @@ public class HUD : MonoBehaviour {
 		
 		GUILayout.BeginHorizontal( GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true) );
 		
-		foreach (PlayerController hero in PlayerController.characters)
+		foreach (PlayerController hero in PartyController.instance.heroes)
 			if ( GUILayout.Button (hero.name, GUILayout.ExpandHeight(true) ) )
-				hero.Select ();
+				PartyController.instance.Select(hero);
 				
 		
 		GUILayout.EndHorizontal();
@@ -20,12 +20,12 @@ public class HUD : MonoBehaviour {
 		
 		if (Time.timeScale == 0f) {
 			
-			if ( GUILayout.Button ("Play") )
+			if ( GUILayout.Button ("Play", GUILayout.ExpandHeight(true)) )
 				Time.timeScale = 1f;
 			
 		} else {
 			
-			if (GUILayout.Button ("Pause") )
+			if (GUILayout.Button ("Pause", GUILayout.ExpandHeight(true)) )
 				Time.timeScale = 0f;
 			
 		}
@@ -36,8 +36,32 @@ public class HUD : MonoBehaviour {
 		
 		GUILayout.BeginVertical( GUILayout.ExpandHeight(true) );
 		
-		GUILayout.Button ("Follow leader");
-		GUILayout.Button ("Go to leader");
+		if (PartyController.instance.followLeader) {
+			
+			if ( GUILayout.Button ("Stop following", GUILayout.ExpandHeight(true)) ) {
+				
+				PartyController.instance.followLeader = false;
+				
+			}
+			
+		} else {
+			
+			if ( GUILayout.Button ("Follow", GUILayout.ExpandHeight(true)) ) {
+				
+				PartyController.instance.followLeader = true;
+				
+			}
+			
+			if ( GUILayout.Button ("Go to leader", GUILayout.ExpandHeight(true)) ) {
+				
+				foreach(PlayerController hero in PartyController.instance.heroes)
+					if (hero != PartyController.instance.leader)
+						hero.Pursue(PartyController.instance.leader.transform);
+				
+			}
+			
+		}
+		
 		
 		GUILayout.EndVertical();
 		
