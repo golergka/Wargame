@@ -66,11 +66,13 @@ public class Legs : MonoBehaviour {
 	
 	#region Move methods
 	
-	private CharacterController characterController;
+	CharacterController characterController;
+	Animator animator;
 	
 	void Awake() {
 		
 		characterController = GetComponent<CharacterController>();
+		animator = GetComponent<Animator>();
 		
 	}
 	
@@ -92,6 +94,8 @@ public class Legs : MonoBehaviour {
 			desiredVelocity *= distance / close;
 		
 		characterController.SimpleMove (desiredVelocity);
+		animator.SetFloat("speed", desiredVelocity.magnitude);
+		transform.LookAt(target);
 		
 	}
 	
@@ -119,6 +123,7 @@ public class Legs : MonoBehaviour {
 		
 		if ( ReachedTarget() ) {
 			legsState = LegsState.Idle;
+			animator.SetFloat("speed", -1f);
 			return;
 		}
 		
