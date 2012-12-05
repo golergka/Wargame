@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(Legs))]
 
-public class PlayerController : MonoBehaviour {
+public class HeroController : MonoBehaviour {
 	
 	new public string name { get { return gameObject.name; } }
 	

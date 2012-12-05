@@ -11,12 +11,12 @@ public class PartyController : MonoBehaviour {
 	}
 	#endregion
 
-	public List<PlayerController> heroes = new List<PlayerController>();
+	public List<HeroController> heroes = new List<HeroController>();
 	
-	private PlayerController _leader;
-	public PlayerController leader { get { return _leader; } }
+	private HeroController _leader;
+	public HeroController leader { get { return _leader; } }
 	
-	public void Select(PlayerController hero) {
+	public void Select(HeroController hero) {
 		
 		if (_leader == hero)
 			return;
@@ -53,13 +53,13 @@ public class PartyController : MonoBehaviour {
 			
 			if (value) {
 				
-				foreach(PlayerController hero in heroes)
+				foreach(HeroController hero in heroes)
 					if( hero != _leader)
 						hero.Follow(leader.transform);
 				
 			} else {
 				
-				foreach(PlayerController hero in heroes)
+				foreach(HeroController hero in heroes)
 					if ( hero != _leader)
 						hero.Stop ();
 				

@@ -7,7 +7,7 @@ public class HUD : MonoBehaviour {
 		
 		GUILayout.BeginHorizontal( GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true) );
 		
-		foreach (PlayerController hero in PartyController.instance.heroes)
+		foreach (HeroController hero in PartyController.instance.heroes)
 			if ( GUILayout.Button (hero.name, GUILayout.ExpandHeight(true) ) )
 				PartyController.instance.Select(hero);
 				
@@ -54,7 +54,7 @@ public class HUD : MonoBehaviour {
 			
 			if ( GUILayout.Button ("Go to leader", GUILayout.ExpandHeight(true)) ) {
 				
-				foreach(PlayerController hero in PartyController.instance.heroes)
+				foreach(HeroController hero in PartyController.instance.heroes)
 					if (hero != PartyController.instance.leader)
 						hero.Pursue(PartyController.instance.leader.transform);
 				

@@ -19,7 +19,7 @@ public class PartyControllerEditor : Editor {
 		DrawDefaultInspector();
 		if ( GUILayout.Button("Populate") ) {
 			
-			partyController.heroes = new List<PlayerController> ( (PlayerController[] ) FindObjectsOfType(typeof(PlayerController)) );
+			partyController.heroes = new List<HeroController> ( (HeroController[] ) FindObjectsOfType(typeof(HeroController)) );
 			
 		}
 		
