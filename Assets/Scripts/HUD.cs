@@ -15,19 +15,58 @@ public class HUD : MonoBehaviour {
 		GUILayout.EndHorizontal();
 		
 	}
+
+	float timeScale = 1f;
+	bool paused = false;
 	
-	void PauseSwitch() {
+	void GameSpeedSwitch() {
+
+		bool dirty = false;
+
+		GUILayout.BeginVertical( GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true) );
+
+		GUILayout.BeginHorizontal( GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true) );
+
+		if ( GUILayout.Button("x1/2", GUILayout.ExpandHeight(true)) ) {
+			timeScale = 0.5f;
+			dirty = true;
+		}
+
+		if ( GUILayout.Button("x1", GUILayout.ExpandHeight(true)) ) {
+			dirty = true;
+			timeScale = 1f;
+		}
+
+		if ( GUILayout.Button("x2", GUILayout.ExpandHeight(true)) ) {
+			dirty = true;
+			timeScale = 2f;
+		}
+
+		GUILayout.EndHorizontal();
 		
-		if (Time.timeScale == 0f) {
+		if (paused) {
 			
-			if ( GUILayout.Button ("Play", GUILayout.ExpandHeight(true)) )
-				Time.timeScale = 1f;
+			if ( GUILayout.Button ("Play", GUILayout.ExpandHeight(true)) ) {
+				dirty = true;
+				paused = false;
+			}
 			
 		} else {
 			
-			if (GUILayout.Button ("Pause", GUILayout.ExpandHeight(true)) )
-				Time.timeScale = 0f;
+			if (GUILayout.Button ("Pause", GUILayout.ExpandHeight(true)) ) {
+				dirty = true;
+				paused = true;
+			}
 			
+		}
+
+		GUILayout.EndVertical();
+
+		if (dirty) {
+			if (paused)
+				Time.timeScale = 0f;
+			else
+				Time.timeScale = timeScale;
 		}
 		
 	}
@@ -85,7 +124,7 @@ public class HUD : MonoBehaviour {
 		
 		HeroList ();
 		
-		PauseSwitch();
+		GameSpeedSwitch();
 		
 		TacticalButtons();
 		
