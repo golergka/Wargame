@@ -5,7 +5,6 @@ public class TargetableTerrain : MonoBehaviour {
 	
 	void Go() {
 	
-		Debug.Log("Go!");
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 		
