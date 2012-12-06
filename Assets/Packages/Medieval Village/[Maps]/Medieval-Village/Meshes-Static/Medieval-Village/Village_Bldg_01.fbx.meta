@@ -1,0 +1,145 @@
+fileFormatVersion: 2
+guid: 803ec0170706c4145b1515d5f83ffcb9
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: Bldg_01_Awning
+    100002: Bldg_01_Details
+    100004: Bldg_01_Doors_Windows_Shutters
+    100006: Bldg_01_LampsLOD0
+    100008: Bldg_01_LampsLOD1
+    100010: Bldg_01_LOD0
+    100012: Bldg_01_LOD1
+    100014: Bldg_01_LOD2
+    100016: Bldg_01_Roof
+    100018: Bldg_01_Signs_Tarp_Flue_Steps
+    100020: Bldg_01_Stone
+    100022: Bldg_01_StuccoWalls
+    100024: Bldg_01_Wood
+    100026: Bldg_01_Wood_Stone_Roof_Stucco
+    100028: IvyLOD0
+    100030: IvyLOD1
+    100032: //RootNode
+    400000: Bldg_01_Awning
+    400002: Bldg_01_Details
+    400004: Bldg_01_Doors_Windows_Shutters
+    400006: Bldg_01_LampsLOD0
+    400008: Bldg_01_LampsLOD1
+    400010: Bldg_01_LOD0
+    400012: Bldg_01_LOD1
+    400014: Bldg_01_LOD2
+    400016: Bldg_01_Roof
+    400018: Bldg_01_Signs_Tarp_Flue_Steps
+    400020: Bldg_01_Stone
+    400022: Bldg_01_StuccoWalls
+    400024: Bldg_01_Wood
+    400026: Bldg_01_Wood_Stone_Roof_Stucco
+    400028: IvyLOD0
+    400030: IvyLOD1
+    400032: //RootNode
+    2300000: Bldg_01_Awning
+    2300002: Bldg_01_Details
+    2300004: Bldg_01_Doors_Windows_Shutters
+    2300006: Bldg_01_LampsLOD0
+    2300008: Bldg_01_LampsLOD1
+    2300010: Bldg_01_LOD2
+    2300012: Bldg_01_Roof
+    2300014: Bldg_01_Signs_Tarp_Flue_Steps
+    2300016: Bldg_01_Stone
+    2300018: Bldg_01_StuccoWalls
+    2300020: Bldg_01_Wood
+    2300022: Bldg_01_Wood_Stone_Roof_Stucco
+    2300024: IvyLOD0
+    2300026: IvyLOD1
+    3300000: Bldg_01_Awning
+    3300002: Bldg_01_Details
+    3300004: Bldg_01_Doors_Windows_Shutters
+    3300006: Bldg_01_LampsLOD0
+    3300008: Bldg_01_LampsLOD1
+    3300010: Bldg_01_LOD2
+    3300012: Bldg_01_Roof
+    3300014: Bldg_01_Signs_Tarp_Flue_Steps
+    3300016: Bldg_01_Stone
+    3300018: Bldg_01_StuccoWalls
+    3300020: Bldg_01_Wood
+    3300022: Bldg_01_Wood_Stone_Roof_Stucco
+    3300024: IvyLOD0
+    3300026: IvyLOD1
+    4300000: Bldg_01_Doors_Windows_Shutters
+    4300002: Bldg_01_Lamps_Signs_Tarp_Flue_Steps
+    4300004: Bldg_01_Roof
+    4300006: Bldg_01_Stone
+    4300008: Bldg_01_StuccoWalls
+    4300010: Bldg_01_Wood
+    4300012: Bldg_01_Signs_Tarp_Flue_Steps
+    4300014: Bldg_01_Lamps
+    4300016: Ivy
+    4300018: Bldg_01_Wood_Stone_Roof_Stucco
+    4300020: 'Bldg_01_Lamps '
+    4300022: Bldg_01_Details
+    4300024: 'Ivy '
+    4300026: 'Bldg_01_LOD2 '
+    4300028: Bldg_01_LOD2
+    4300030: Awning
+    4300032: Bldg_01_LampsLOD1
+    4300034: Bldg_01_LampsLOD0
+    4300036: IvyLOD1
+    4300038: IvyLOD0
+    4300040: Awning_Attachment_Left
+    4300042: 'Awning_Attachment_Left '
+    4300044: Awning_Attachment_Center
+    4300046: 'Awning_Attachment_Center '
+    4300048: Awning_Attachment_Right
+    4300050: 'Awning_Attachment_Right '
+    4300052: Bldg_01_Awning
+    11100000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 2
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 1
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 1
+  userData: 

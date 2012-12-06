@@ -1,0 +1,95 @@
+fileFormatVersion: 2
+guid: 1a34927fa96fc405e8421c0f3e9c1c4b
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: Awning Attachments
+    100002: Awning_Attachment_Center
+    100004: 'Awning_Attachment_Center '
+    100006: Awning_Attachment_Left
+    100008: 'Awning_Attachment_Left '
+    100010: Awning_Attachment_Right
+    100012: 'Awning_Attachment_Right '
+    100014: Awning_Cloth_Physics
+    100016: //RootNode
+    400000: Awning Attachments
+    400002: Awning_Attachment_Center
+    400004: 'Awning_Attachment_Center '
+    400006: Awning_Attachment_Left
+    400008: 'Awning_Attachment_Left '
+    400010: Awning_Attachment_Right
+    400012: 'Awning_Attachment_Right '
+    400014: Awning_Cloth_Physics
+    400016: //RootNode
+    2300000: Awning_Attachment_Center
+    2300002: 'Awning_Attachment_Center '
+    2300004: Awning_Attachment_Left
+    2300006: 'Awning_Attachment_Left '
+    2300008: Awning_Attachment_Right
+    2300010: 'Awning_Attachment_Right '
+    2300012: Awning_Cloth_Physics
+    3300000: Awning_Attachment_Center
+    3300002: 'Awning_Attachment_Center '
+    3300004: Awning_Attachment_Left
+    3300006: 'Awning_Attachment_Left '
+    3300008: Awning_Attachment_Right
+    3300010: 'Awning_Attachment_Right '
+    3300012: Awning_Cloth_Physics
+    4300000: Awning_Cloth_Physics
+    4300002: 'Awning_Attachment_Right '
+    4300004: 'Awning_Attachment_Center '
+    4300006: Awning_Attachment_Left
+    4300008: Awning_Attachment_Right
+    4300010: Awning_Attachment_Center
+    4300012: 'Awning_Attachment_Left '
+    11100000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 180
+    splitTangentsAcrossUV: 1
+    normalImportMode: 1
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 1
+  userData: 

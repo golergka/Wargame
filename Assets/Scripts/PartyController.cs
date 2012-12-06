@@ -11,7 +11,7 @@ public class PartyController : MonoBehaviour {
 	}
 	#endregion
 
-	public List<HeroController> heroes = new List<HeroController>();
+	public List<HeroController> heroes;
 	
 	private HeroController _leader;
 	public HeroController leader { get { return _leader; } }
@@ -35,6 +35,7 @@ public class PartyController : MonoBehaviour {
 	
 	void Start() {
 		
+		heroes = new List<HeroController> ( (HeroController[] ) FindObjectsOfType(typeof(HeroController)) );
 		Select(heroes[0]);
 		
 	}
