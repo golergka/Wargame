@@ -24,14 +24,14 @@ SubstanceImporter:
         texture: {instanceID: 0}
     - name: $randomseed
       value:
-        scalar[0]: 0
+        scalar[0]: 7689
         scalar[1]: 0
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
     - name: Amount
       value:
-        scalar[0]: 0
+        scalar[0]: .289999992
         scalar[1]: 0
         scalar[2]: 0
         scalar[3]: 0
@@ -45,14 +45,14 @@ SubstanceImporter:
         texture: {instanceID: 0}
     - name: Bricks_X
       value:
-        scalar[0]: 8
+        scalar[0]: 26.7999992
         scalar[1]: 0
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
     - name: Bricks_Y
       value:
-        scalar[0]: 22
+        scalar[0]: 29.6000004
         scalar[1]: 0
         scalar[2]: 0
         scalar[3]: 0
@@ -123,7 +123,7 @@ SubstanceImporter:
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
-      scale: {x: .200000003, y: .200000003}
+      scale: {x: 1, y: 1}
       generateAllOutputs: 1
       animationUpdateRate: 42
     materialProperties:
@@ -147,12 +147,12 @@ SubstanceImporter:
         data:
           first:
             name: _Shininess
-          second: .078125
+          second: .19200018
       colors:
         data:
           first:
             name: _Color
-          second: {r: 1, g: 1, b: 1, a: 1}
+          second: {r: 1, g: 1, b: 1, a: .541176498}
         data:
           first:
             name: _SpecColor
