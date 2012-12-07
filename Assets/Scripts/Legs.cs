@@ -1,18 +1,41 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using Pathfinding;
 
+[Serializable]
+public class LegsProperties {
+
+	public float speed = 1f;
+	public float targetReach = 0.5f;
+	public float targetTransformReach = 3f;
+
+}
+
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Seeker))]
-
 public class Legs : MonoBehaviour {
 	
 	#region Public setup
 
-	public float speed = 1f;
-	
-	public float targetReach = 0.5f; // reach to use for waypoints and Vector3 targets
-	public float targetTransformReach = 3f; // reach to use for Transform targets
+	public LegsProperties properties;
+	public float speed {
+		get {
+			return properties.speed;
+		}
+	}
+	// reach to use for waypoints and Vector3 targets
+	public float targetReach {
+		get {
+			return properties.targetReach;
+		}
+	}
+	// reach to use for Transform targets
+	public float targetTransformReach {
+		get {
+			return properties.targetTransformReach;
+		}
+	}
 	
 	#endregion
 	
@@ -112,7 +135,7 @@ public class Legs : MonoBehaviour {
 	
 	}
 	
-	public float repathRate = 0.5f;
+	const float REPATH_RATE = 0.5f;
 	float lastPathSearch;
 	
 	public void Repath() {
@@ -132,7 +155,7 @@ public class Legs : MonoBehaviour {
 	}
 	
 	public IEnumerator WaitToRepath () {
-		float timeLeft = repathRate - (Time.time-lastPathSearch);
+		float timeLeft = REPATH_RATE - (Time.time-lastPathSearch);
 		
 		yield return new WaitForSeconds (timeLeft);
 		Repath ();
@@ -150,6 +173,7 @@ public class Legs : MonoBehaviour {
 		
 	}
 
+	[HideInInspector]
 	public bool gotPath = false;
 	
 	void Update() {
