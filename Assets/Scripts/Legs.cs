@@ -16,7 +16,7 @@ public class LegsProperties {
 [RequireComponent(typeof(Seeker))]
 public class Legs : MonoBehaviour {
 	
-	#region Public setup
+#region Public setup
 
 	public LegsProperties properties;
 	public float speed {
@@ -37,9 +37,9 @@ public class Legs : MonoBehaviour {
 		}
 	}
 	
-	#endregion
+#endregion
 	
-	#region Private state
+#region Private state
 	
 	private Vector3 targetPosition;
 	private Transform targetTransform;
@@ -55,9 +55,9 @@ public class Legs : MonoBehaviour {
 	
 	private LegsState legsState = LegsState.Idle;
 	
-	#endregion
+#endregion
 	
-	#region Public interface
+#region Public interface
 	
 	public void Move(Vector3 position) {
 		
@@ -101,9 +101,9 @@ public class Legs : MonoBehaviour {
 		
 	}
 	
-	#endregion
+#endregion
 	
-	#region Move methods
+#region Move methods
 	
 	CharacterController characterController;
 	Animator animator;
@@ -235,6 +235,6 @@ public class Legs : MonoBehaviour {
 		
 	}
 	
-	#endregion
+#endregion
 	
 }

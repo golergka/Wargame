@@ -77,6 +77,7 @@ public class Health : MonoBehaviour {
 
 			healthPoints = 0;
 			zeroHealth = true;
+			gameObject.SetActive(false);
 
 		} else {
 
