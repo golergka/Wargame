@@ -3,7 +3,7 @@ using System.Collections;
 
 // This script is attached to obstacles that can obscure the heroes.
 
-public class ShyObstacle : MonoBehaviour {
+public class Hideable : MonoBehaviour {
 
 	public float hideSpeed = 1f;
 	public float hiddenAlpha = 0.2f;
@@ -11,24 +11,36 @@ public class ShyObstacle : MonoBehaviour {
 
 	private int layer;
 
-	private bool _hidden = false;
-	public bool hidden {
-		get { return _hidden; }
-		set {
+	private int hideCount = 0; // how many objects are hiding use now
+	
+	public void Hide() {
+	
+		hideCount++;
 
-			if (_hidden == value)
-				return;
+		if (hideCount == 1) { // just hid
+			layer = gameObject.layer;
+			gameObject.layer = 2; // ignore raycast
+		}
 
-			if (value) {
-				layer = gameObject.layer;
-				gameObject.layer = 2; // Ignore Raycast
-			} else {
-				gameObject.layer = layer;
-			}
+	}
 
-			_hidden = value;
+	public void Unhide() {
+		hideCount--;
+
+		if (hideCount < 0) {
+		
+			Debug.LogError("hideCount below zero!");
+
+		} else if ( hideCount == 0 ) { // just unhid
+
+			gameObject.layer = layer;
 
 		}
+
+	}
+
+	public bool hidden {
+		get { return (hideCount > 0); }
 	}
 
 	private Renderer[] renderers;
