@@ -55,7 +55,7 @@ public class Vision : MonoBehaviour {
 
 	}
 
-	#region Messaging
+#region Messaging
 
 	private void SendNoticedMessage(Visible observee) {
 
@@ -71,15 +71,21 @@ public class Vision : MonoBehaviour {
 
 	}
 
-	#endregion
+#endregion
 
-	#region Visibles and invisibles
+#region Visibles and invisibles
 
 	// We keep arrays of both visibles and invisbles in sight
 	private const int VISION_LIMIT = 100; // Vision limit
 	private Visible[] visiblesInSight   = new Visible[VISION_LIMIT];
 	private Visible[] invisiblesInSight = new Visible[VISION_LIMIT];
 	// It may be better to switch to Lists in some situations.
+
+	public List<Visible> visibles {
+		get {
+			return new List<Visible>(visiblesInSight);
+		}
+	}
 
 	// Basic array management, nothing particularly interesting here.
 
@@ -143,7 +149,7 @@ public class Vision : MonoBehaviour {
 
 	}
 
-	#endregion
+#endregion
 
 	public void ChangedVisibility(Visible visible) {
 

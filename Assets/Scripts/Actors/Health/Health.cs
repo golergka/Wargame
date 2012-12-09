@@ -20,6 +20,7 @@ interface IHealthStateListener {
 public class HealthProperties {
 
 	public int maxHealthPoints = 100;
+	public bool showHUD = true;
 
 }
 
