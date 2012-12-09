@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour {
 	public float snapTimeout;
 	public float lookAhead = 1f;
 	public Vector3 cameraOffset = new Vector3(0f,25f,-45f);
+	public Vector3 cameraTargetOffset = new Vector3(0,0,0);
 	
 	public Transform target {
 		get {
@@ -58,6 +59,8 @@ public class CameraController : MonoBehaviour {
 			transform.position += movement;
 			
 		}
+
+		transform.LookAt(target.position + cameraTargetOffset);
 		
 	}
 	
