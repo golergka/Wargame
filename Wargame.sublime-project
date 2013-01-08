@@ -1,0 +1,38 @@
+{
+	"folders":
+	[
+		{
+			"path": "Assets/Scripts",
+			"file_exclude_patterns": ["*.meta"]
+		}
+	],
+
+	"settings":
+	{
+		"completesharp_assemblies": 
+		[
+			"/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll"
+		]
+	},
+
+	"build_systems":
+    [
+
+        {
+
+            "name": "Unity Mono",
+
+            "cmd": 
+            [
+            	"/Applications/Unity/Unity.app/Contents/Frameworks/Mono/bin/xbuild", 
+            	"/noconsolelogger",
+            	"/logger:PATH TO SublimeLogger.dll",
+            	"${project_path}Wargame.sln"
+            ],
+
+            "file_regex": "([^(]*)\\((\\d*),(\\d*)\\)\\s*(.*)"
+
+        }
+
+    ]
+}

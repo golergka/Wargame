@@ -5,7 +5,16 @@ public class DisableSpawner : MonoBehaviour {
 
 	public Transform afterLife;
 
+	bool quitting = false;
+
+	void OnApplicationQuit() {
+		quitting = true;
+	}
+
 	void OnDisable() {
+
+		if (quitting)
+			return;
 
 		if (!Application.isPlaying)
 			return;

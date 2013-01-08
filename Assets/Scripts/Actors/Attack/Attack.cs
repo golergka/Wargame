@@ -10,19 +10,13 @@ interface IAttackListener {
 
 }
 
-[Serializable]
-public class AttackProperties {
-
-	public float period;
-	public float range;
-	public int damage;
-
-}
-
 public class Attack : MonoBehaviour, IVisionListener {
 
-	private Health target;
-	public AttackProperties properties;
+	protected Health target;
+
+	public float period = 1f;
+	public float range = 5f;
+	public int damage = 10;
 
 #region Messaging
 
@@ -96,9 +90,9 @@ public class Attack : MonoBehaviour, IVisionListener {
 
 	float lastAttackTime = 0;
 
-	private void ApplyDamage() {
+	protected virtual void ApplyDamage() {
 
-		target.InflictDamage( properties.damage );
+		target.InflictDamage( damage );
 		foreach(Component listener in attackListeners)
 				((IAttackListener)listener).OnApplyDamage();
 
@@ -130,12 +124,12 @@ public class Attack : MonoBehaviour, IVisionListener {
 
 		float timePassed = Time.time - lastAttackTime;
 
-		if ( timePassed < properties.period )
+		if ( timePassed < period )
 			return;
 
 		float targetDistance = Vector3.Distance(transform.position, target.transform.position);
 
-		if ( targetDistance > properties.range )
+		if ( targetDistance > range )
 			return;
 
 		ApplyDamage();
