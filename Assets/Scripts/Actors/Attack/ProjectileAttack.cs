@@ -3,8 +3,10 @@ using System.Collections;
 
 public class ProjectileAttack : Attack {
 
+	const float FORTYFIVEDEGREES = 0.785398163f; // google, muthafucka
+
 	public Transform projectile;
-	public float spawnDistance = 0.1f;
+	public float spawnDistance = 1f; // distance above the transform to spawn the projectile
 	public float throwForce;
 
 	protected override void ApplyDamage() {
@@ -12,10 +14,7 @@ public class ProjectileAttack : Attack {
 		if (projectile == null) {
 			Debug.LogWarning("Projectile not set up!");
 			return;
-		}
-
-		Vector3 direction = target.transform.position - transform.position;
-		direction.Normalize();
+		}		
 
 		Transform projectileInstance =
 		(Transform) Instantiate(projectile, transform.position + new Vector3(0f, spawnDistance, 0f), transform.rotation);
@@ -26,26 +25,50 @@ public class ProjectileAttack : Attack {
 		}
 
 		if (Physics.gravity.x != 0 || Physics.gravity.z != 0) {
-			Debug.LogError("This algorithm was created for vertical gravity only.");
+			Debug.LogWarning("This algorithm was created for vertical gravity only.");
 			return;
 		}
 
 		// Algorythm copied from the almighty Wikipedia
-		// http://en.wikipedia.org/wiki/Trajectory_of_a_projectile#Angle_of_reach
-		// Please sent a donation if you're reading this source code
+		// http://en.wikipedia.org/wiki/Trajectory_of_a_projectile#Angle_required_to_hit_coordinate_.28x.2Cy.29
+		// Please sent a donation if you're reading this source code. Wikipedia is like super-awesome. Really.
 
-		// Vector3 targetPosition = target.transform.position;
-		// Vector3 startPosition = projectileInstance.position;
+		// TODO: add target current speed to estimate it's position at the time of impact
+		// Will have to do a little trigonometry one day, won't we?
+		Vector3 horizontalDirection = target.transform.position - projectileInstance.transform.position;
+		horizontalDirection.y = 0; // it has to be normalized later, because we'll need it's magnitude
 
-		// Vector3 delta = targetPosition - startPosition;
+		float x = horizontalDirection.magnitude; // horizontal direction isn't normalized yet
+		float y = target.transform.position.y - projectileInstance.position.y;
 
-		// float height = startPosition.y - targetPosition.y;
-		// float g = -Physics.gravity.y;
-		
-		// float d = ( Vector2(startPosition.x, startPosition.y) - Vector2(targetPosition.x, targetPosition.y) ).magnitude;
-		// float angle = Mathf.Asin(g*d/(throwForce*throwForce));
+		float g = Physics.gravity.y;
+		float toRoot = Mathf.Pow(throwForce,4) - g * (g*x*x + 2*y*throwForce*throwForce);
 
-		projectileInstance.rigidbody.AddForce(direction * throwForce + new Vector3(0f,3f,0f), ForceMode.Impulse );
+		float angle;
+
+		if (toRoot < 0) { // checking if we have a solution at all
+
+			Debug.Log("Distance too great, trying 45 degrees");
+			angle = FORTYFIVEDEGREES;
+
+		} else {
+
+			// TODO: choose the root depending on whether we can shoot directly
+			// Now we just choose the bigger root (the plus in the middle) because that way we're more likely to clear the fence
+			// However, if there's no fence, we probably should choose the smaller root so that projectile hits target faster
+			angle = Mathf.Atan2(throwForce*throwForce + Mathf.Sqrt(toRoot), g*x);
+
+		}
+
+		horizontalDirection.Normalize();
+
+		Vector3 throwForceVector = new Vector3(
+			horizontalDirection.x * throwForce * Mathf.Abs( Mathf.Cos(angle) ),
+			throwForce * Mathf.Sin(angle),
+			horizontalDirection.z * throwForce * Mathf.Abs( Mathf.Cos(angle) )
+			);
+
+		projectileInstance.rigidbody.AddForce(throwForceVector , ForceMode.Impulse );
 
 	}
 

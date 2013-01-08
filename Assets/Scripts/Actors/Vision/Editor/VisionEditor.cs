@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections;
 
-[CustomEditor(typeof(Vision))]
+//[CustomEditor(typeof(Vision))]
 public class VisionEditor : Editor {
 
 	Vision vision;

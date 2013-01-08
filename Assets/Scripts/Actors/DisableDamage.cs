@@ -9,7 +9,8 @@ public class DisableDamage : MonoBehaviour {
 
 	void OnDisable() {
 
-		List<Visible> visibles = GetComponent<Vision>().visibles;
+		Vision vision = GetComponent<Vision>();
+		List<Visible> visibles = vision.visibles;
 		
 		foreach(Visible v in visibles) {
 
@@ -17,8 +18,12 @@ public class DisableDamage : MonoBehaviour {
 				continue;
 
 			Health health = v.GetComponent<Health>();
-			if ( health != null )
-				health.InflictDamage(damage);
+			if ( health == null )
+				continue;
+			
+			float sqrDistance = (v.transform.position - transform.position).sqrMagnitude;
+
+			health.InflictDamage( Mathf.RoundToInt( sqrDistance * (float) damage / vision.sqrVisionDistance ) );
 
 		}
 

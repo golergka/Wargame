@@ -29,7 +29,8 @@ public class Vision : MonoBehaviour {
 	}
 
 	// Vision distance. We keep square distnace to optimize length checks
-	private float sqrVisionDistance = 100f;
+	private float _sqrVisionDistance = 100f;
+	public float sqrVisionDistance { get { return _sqrVisionDistance; } }
 	private float _visionDistance = 10f;
 	public float visionDistance {
 
@@ -41,16 +42,19 @@ public class Vision : MonoBehaviour {
 					" is bigger than a gridStep of " + VisibleGrid.instance.gridStep.ToString() );
 			else {
 				_visionDistance = value;
-				sqrVisionDistance = value*value;
+				_sqrVisionDistance = value*value;
 			}
 		}
 
 	}
 
+	public float visionDistanceEditor = 5f;
+
 	Component[] visionListeners;
 
 	void Start() {
 
+		visionDistance = visionDistanceEditor;
 		visionListeners = GetComponents(typeof(IVisionListener));
 
 	}
@@ -180,14 +184,14 @@ public class Vision : MonoBehaviour {
 	Vector2 observee2d = new Vector2(observee.transform.position.x, observee.transform.position.z);
 	Vector2 position2d = new Vector2(transform.position.x, transform.position.z);
 	Vector2 difference = observee2d - position2d;
-	return (difference.sqrMagnitude < sqrVisionDistance);
+	return (difference.sqrMagnitude < _sqrVisionDistance);
 
 #endif
 
 #if VISION_3D
 
 	Vector3 difference = observee.transform.position - transform.position;
-	return (difference.sqrMagnitude < sqrVisionDistance);
+	return (difference.sqrMagnitude < _sqrVisionDistance);
 
 #endif
 
@@ -270,7 +274,7 @@ public class Vision : MonoBehaviour {
 
 	}
 
-	void OnDrawGizmosSelected() {
+	void OnDrawGizmos() {
 
 		Gizmos.color = Color.blue;
 		Gizmos.DrawWireSphere(transform.position, visionDistance);
