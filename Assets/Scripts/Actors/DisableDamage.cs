@@ -2,28 +2,56 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(Vision))]
 public class DisableDamage : MonoBehaviour {
 
 	public int damage = 10;
+	public float delay = 0f;
+
+	// used if delay is above zero
+
+	public float range = 3f;
 
 	void OnDisable() {
 
-		Vision vision = GetComponent<Vision>();
-		List<Visible> visibles = vision.visibles;
-		
-		foreach(Visible v in visibles) {
+		if (delay <= 0) {
 
-			if ( v == null )
-				continue;
+			Vision vision = GetComponent<Vision>();
 
-			Health health = v.GetComponent<Health>();
-			if ( health == null )
-				continue;
+			if (vision == null) {
+				Debug.LogWarning("Vision is required if delay is 0");
+				return;
+			}
+
+			List<Visible> visibles = vision.visibles;
 			
-			float sqrDistance = (v.transform.position - transform.position).sqrMagnitude;
+			foreach(Visible v in visibles) {
 
-			health.InflictDamage( Mathf.RoundToInt( sqrDistance * (float) damage / vision.sqrVisionDistance ) );
+				if ( v == null )
+					continue;
+
+				Health health = v.GetComponent<Health>();
+				if ( health == null )
+					continue;
+				
+				float sqrDistance = (v.transform.position - transform.position).sqrMagnitude;
+
+				health.InflictDamage( Mathf.RoundToInt( sqrDistance * (float) damage / vision.sqrVisionDistance ) );
+
+			}
+
+		} else {
+
+			GameObject destroyer = new GameObject(gameObject.name + " [destroyer]");
+			destroyer.transform.position = transform.position;
+			
+			Vision destroyerVision = destroyer.AddComponent<Vision>();
+			destroyerVision.visionDistance = range;
+
+			TimedDisabler destroyerDisabler = destroyer.AddComponent<TimedDisabler>();
+			destroyerDisabler.lifeTime = delay;
+
+			DisableDamage destroyerDamager = destroyer.AddComponent<DisableDamage>();
+			destroyerDamager.damage = this.damage;
 
 		}
 

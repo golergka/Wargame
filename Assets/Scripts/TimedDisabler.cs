@@ -5,18 +5,21 @@ public class TimedDisabler : MonoBehaviour {
 
 	public float lifeTime = 1f;
 
-	IEnumerator SelfDestruct() {
-
-		yield return new WaitForSeconds(lifeTime);
-		gameObject.SetActive(false);
-
-	}
+	float startTime;
 
 	// Use this for initialization
 	void Start () {
 
-		StartCoroutine(SelfDestruct());
+		startTime = Time.time;
 	
+	}
+
+	void Update() {
+
+		// This is better than coroutine becase it allowes to change lifeTime in runtime
+		if (Time.time - startTime >= lifeTime)
+			gameObject.SetActive(false);
+
 	}
 
 }
