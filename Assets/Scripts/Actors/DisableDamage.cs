@@ -11,7 +11,16 @@ public class DisableDamage : MonoBehaviour {
 
 	public float range = 3f;
 
+	bool quitting = false;
+
+	void OnApplicationQuit() {
+		quitting = true;
+	}
+
 	void OnDisable() {
+
+		if (quitting)
+			return;
 
 		if (delay <= 0) {
 

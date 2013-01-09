@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour {
 	public float lookAhead = 1f;
 	public Vector3 cameraOffset = new Vector3(0f,25f,-45f);
 	public Vector3 cameraTargetOffset = new Vector3(0,0,0);
+	public float listenerLift = 1f;
 	
 	public Transform target {
 		get {
@@ -21,11 +22,21 @@ public class CameraController : MonoBehaviour {
 	private float lastSnapTime = 0f;
 	
 	public static CameraController instance;
+
+	private GameObject listener;
 	
 	void Awake() {
 		
 		instance = this;
 		
+	}
+
+	void Start() {
+
+		listener = new GameObject("Audio listener");
+		listener.transform.parent = this.transform;
+		listener.AddComponent<AudioListener>();
+
 	}
 	
 	private Vector3 targetCamera {
@@ -65,6 +76,19 @@ public class CameraController : MonoBehaviour {
 	}
 	
 	void LateUpdate() {
+
+		Ray ray = this.camera.ViewportPointToRay( new Vector3(0.5f, 0.5f, 0f) );
+		RaycastHit hit;
+
+		int layerMask = 1 << 11; // terrain layer ONLY
+
+		if ( Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask) ) {
+
+			Vector3 position = hit.point;
+			position.y += listenerLift;
+			listener.transform.position = position;
+
+		}
 		
 		Apply();
 		
