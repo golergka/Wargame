@@ -85,8 +85,17 @@ public class PartyController : MonoBehaviour {
 	// For now, it's really simple
 	public void Attack(Transform target) {
 
-		foreach(HeroController hero in heroes)
-			hero.Attack(target);
+		if (_followLeader) {
+			foreach(HeroController hero in heroes)
+				hero.Attack(target);
+		} else
+			leader.Attack(target);
+
+	}
+
+	public void Move(Vector3 targetPosition) {
+
+		leader.Move(targetPosition);
 
 	}
 

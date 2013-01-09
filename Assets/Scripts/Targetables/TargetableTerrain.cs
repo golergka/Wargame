@@ -29,7 +29,7 @@ public class TargetableTerrain : MonoBehaviour {
 	
 	void Go() {
 			
-		PartyController.instance.leader.Move(mousePointer.transform.position);
+		PartyController.instance.Move(mousePointer.transform.position);
 		
 	}
 	
