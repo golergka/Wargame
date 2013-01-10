@@ -29,8 +29,34 @@ public class PartyController : MonoBehaviour {
 	
 #region Leader
 
+	void EnforceFollowLeader() {
+
+		if (followLeader) {
+				
+			foreach(HeroController hero in heroes)
+				if( hero != _leader)
+					hero.Follow(leader.transform);
+			
+		} else {
+			
+			foreach(HeroController hero in heroes)
+				if ( hero != _leader)
+					hero.Stop ();
+			
+		}
+
+	}
+
 	private HeroController _leader;
-	public HeroController leader { get { return _leader; } }
+	public HeroController leader {
+		get {
+			return _leader;
+		}
+		private set {
+			_leader = value;
+			EnforceFollowLeader();
+		}
+	}
 	
 	private bool _followLeader;
 	public bool followLeader {
@@ -44,19 +70,7 @@ public class PartyController : MonoBehaviour {
 			
 			_followLeader = value;
 			
-			if (value) {
-				
-				foreach(HeroController hero in heroes)
-					if( hero != _leader)
-						hero.Follow(leader.transform);
-				
-			} else {
-				
-				foreach(HeroController hero in heroes)
-					if ( hero != _leader)
-						hero.Stop ();
-				
-			}
+			EnforceFollowLeader();
 			
 		}
 		
@@ -67,14 +81,11 @@ public class PartyController : MonoBehaviour {
 		if (_leader == hero)
 			return;
 		
-		_leader = hero;
-		
-		if (followLeader) { 
-			
-			// this looks retarted, but that's because it's really a property
-			followLeader = true;
-			
-		}
+		leader = hero;
+
+		// Resetting the target
+		partyTarget = null;
+		partyTargetPosition = null;
 		
 	}
 
@@ -82,8 +93,13 @@ public class PartyController : MonoBehaviour {
 
 #region Party actions
 
+	Transform partyTarget;
+	Vector3? partyTargetPosition;
+
 	// For now, it's really simple
 	public void Attack(Transform target) {
+
+		partyTarget = target;
 
 		if (_followLeader) {
 			foreach(HeroController hero in heroes)
@@ -94,6 +110,8 @@ public class PartyController : MonoBehaviour {
 	}
 
 	public void Move(Vector3 targetPosition) {
+
+		partyTargetPosition = targetPosition;
 
 		leader.Move(targetPosition);
 
