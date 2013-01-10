@@ -2,20 +2,6 @@ using System;
 using UnityEngine;
 using System.Collections;
 
-interface IHealthChangeListener {
-
-	void OnTakeDamage(int damageAmount);
-	void OnTakeHealing(int healingAmount);
-
-}
-
-interface IHealthStateListener {
-
-	void OnFullHealth();
-	void OnZeroHealth();
-
-}
-
 [Serializable]
 public class HealthProperties {
 
@@ -45,21 +31,23 @@ public class Health : MonoBehaviour {
 			if ( healthPoints >= value ) {
 				
 				healthPoints = value;
-				foreach(Component listener in healthStateListeners)
-					((IHealthStateListener)listener).OnFullHealth();
+
+				if (FullHealth != null)
+					FullHealth(this);
 
 			}
 
 		}
 	}
 
-	private Component[] healthChangeListeners;
-	private Component[] healthStateListeners;
+	public event Action<Health, int> TakeDamage;
+	public event Action<Health, int> TakeHealing;
+	public event Action<Health> FullHealth;
+	public event Action<Health> ZeroHealth;
+
 	void Start () {
 
 		healthPoints = maxHealthPoints;
-		healthChangeListeners = GetComponents(typeof(IHealthChangeListener));
-		healthStateListeners = GetComponents(typeof(IHealthStateListener));
 	
 	}
 
@@ -72,12 +60,12 @@ public class Health : MonoBehaviour {
 			
 		}
 
-		bool zeroHealth = false;
+		bool died = false;
 
 		if ( damageAmount >= healthPoints ) {
 
 			healthPoints = 0;
-			zeroHealth = true;
+			died = true;
 			gameObject.SetActive(false);
 
 		} else {
@@ -86,13 +74,12 @@ public class Health : MonoBehaviour {
 
 		}
 
-		// Temporary off as nobody uses that
-		foreach(Component listener in healthChangeListeners)
-			((IHealthChangeListener)listener).OnTakeDamage(damageAmount);
+		if (TakeDamage != null)
+			TakeDamage(this, damageAmount);
 
-		if (zeroHealth)
-			foreach(Component listener in healthStateListeners)
-				((IHealthStateListener)listener).OnZeroHealth();
+		if (died)
+			if (ZeroHealth != null)
+				ZeroHealth(this);
 
 	}
 
@@ -108,13 +95,14 @@ public class Health : MonoBehaviour {
 		if ( healingAmount >= maxHealthPoints - healthPoints ) {
 
 			healthPoints = maxHealthPoints;
-			foreach(Component listener in healthStateListeners)
-				((IHealthStateListener)listener).OnFullHealth();
+
+			if (FullHealth != null)
+				FullHealth(this);
 
 		}
 
-		foreach(Component listener in healthChangeListeners)
-			((IHealthChangeListener)listener).OnTakeHealing(healingAmount);
+		if (TakeHealing != null)
+			TakeHealing(this, healingAmount);
 
 	}
 

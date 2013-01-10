@@ -22,6 +22,14 @@ public class PartyController : MonoBehaviour {
 		
 		heroes = new List<HeroController> ( (HeroController[] ) FindObjectsOfType(typeof(HeroController)) );
 		Select(heroes[0]);
+
+		if (targetMarker == null) {
+			Debug.LogWarning("No target marker assigned!");
+			return;
+		}
+
+		_targetMarkerInstance = (Transform) Instantiate(targetMarker, transform.position, transform.rotation);
+		_targetMarkerInstance.parent = transform;
 		
 	}
 
@@ -91,10 +99,64 @@ public class PartyController : MonoBehaviour {
 
 #endregion
 
-#region Party actions
+#region Party targets
 
-	Transform partyTarget;
+	public Transform targetMarker;
+	Transform _targetMarkerInstance;
+
+	private Transform _partyTarget;
+	public Transform partyTarget {
+
+		get { return _partyTarget; }
+
+		private set {
+
+			if (_partyTarget != null) {
+
+				Health oldHealth = _partyTarget.GetComponent<Health>();
+			
+				if (oldHealth != null)
+					oldHealth.ZeroHealth -= OnZeroHealth;
+
+			}
+
+			_partyTarget = value;
+
+			if (_partyTarget != null) {
+
+				_targetMarkerInstance.active = true;
+				_targetMarkerInstance.parent = _partyTarget;
+				_targetMarkerInstance.localScale = new Vector3(1f,1f,1f);
+				_targetMarkerInstance.localPosition = new Vector3(1f,1f,1f);
+
+				Health newHealth = _partyTarget.GetComponent<Health>();
+				if (newHealth != null)
+					newHealth.ZeroHealth += OnZeroHealth;
+
+			} else {
+
+				if (_targetMarkerInstance != null) {
+					_targetMarkerInstance.active = false;
+					_targetMarkerInstance.parent = this.transform;
+				}
+
+			}
+
+		}
+
+	}
+
 	Vector3? partyTargetPosition;
+
+	public void OnZeroHealth(Health health) {
+
+		partyTarget = null;
+
+	}
+
+#endregion
+
+#region Party actions
 
 	// For now, it's really simple
 	public void Attack(Transform target) {
