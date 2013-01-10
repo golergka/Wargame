@@ -30,6 +30,7 @@ public class PartyController : MonoBehaviour {
 
 		_targetMarkerInstance = (Transform) Instantiate(targetMarker, transform.position, transform.rotation);
 		_targetMarkerInstance.parent = transform;
+		_targetMarkerInstance.gameObject.SetActive(true);
 		
 	}
 
@@ -115,8 +116,22 @@ public class PartyController : MonoBehaviour {
 
 				Health oldHealth = _partyTarget.GetComponent<Health>();
 			
-				if (oldHealth != null)
+				if (oldHealth != null) {
+
 					oldHealth.ZeroHealth -= OnZeroHealth;
+
+					HealthHUD hud = oldHealth.hud;
+
+					if (hud != null) {
+
+						if (!hud.shownByDefault)
+							hud.gameObject.SetActive(false);
+
+					} else {
+						Debug.LogWarning("Couldn't find health hud!");
+					}
+
+				}
 
 			}
 
@@ -124,19 +139,33 @@ public class PartyController : MonoBehaviour {
 
 			if (_partyTarget != null) {
 
-				_targetMarkerInstance.active = true;
+				_targetMarkerInstance.gameObject.SetActive(true);
 				_targetMarkerInstance.parent = _partyTarget;
 				_targetMarkerInstance.localScale = new Vector3(1f,1f,1f);
-				_targetMarkerInstance.localPosition = new Vector3(1f,1f,1f);
+				_targetMarkerInstance.localPosition = new Vector3(0f,0f,0f);
 
 				Health newHealth = _partyTarget.GetComponent<Health>();
-				if (newHealth != null)
+
+				if (newHealth != null) {
+
 					newHealth.ZeroHealth += OnZeroHealth;
+
+					HealthHUD hud = newHealth.hud;
+
+					if (hud != null) {
+
+						hud.gameObject.SetActive(true);
+
+					} else {
+						Debug.LogWarning("Couldn't find healthHUD!");
+					}
+
+				}
 
 			} else {
 
 				if (_targetMarkerInstance != null) {
-					_targetMarkerInstance.active = false;
+					_targetMarkerInstance.gameObject.SetActive(false);
 					_targetMarkerInstance.parent = this.transform;
 				}
 
@@ -150,13 +179,23 @@ public class PartyController : MonoBehaviour {
 
 	public void OnZeroHealth(Health health) {
 
-		partyTarget = null;
+		Stop();
 
 	}
 
 #endregion
 
 #region Party actions
+
+	public void Stop() {
+
+		partyTarget = null;
+
+		leader.Stop();
+
+		EnforceFollowLeader();
+
+	}
 
 	// For now, it's really simple
 	public void Attack(Transform target) {
@@ -173,8 +212,9 @@ public class PartyController : MonoBehaviour {
 
 	public void Move(Vector3 targetPosition) {
 
-		partyTargetPosition = targetPosition;
+		Stop();
 
+		partyTargetPosition = targetPosition;
 		leader.Move(targetPosition);
 
 	}

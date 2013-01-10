@@ -40,6 +40,9 @@ public class Health : MonoBehaviour {
 		}
 	}
 
+	[HideInInspector]
+	public HealthHUD hud;
+
 	public event Action<Health, int> TakeDamage;
 	public event Action<Health, int> TakeHealing;
 	public event Action<Health> FullHealth;

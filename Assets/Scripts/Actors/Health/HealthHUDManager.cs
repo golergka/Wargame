@@ -16,14 +16,15 @@ public class HealthHUDManager : MonoBehaviour {
 		Health[] healths = FindObjectsOfType(typeof(Health)) as Health[];
 		foreach(Health h in healths) {
 
-			if (!h.properties.showHUD)
-				continue;
-
 			GameObject hudObject = Object.Instantiate(healthHUDPrefab, new Vector3(0.5f,0.5f,1f), transform.rotation) as GameObject;
-			hudObject.name = h.name + " Health HUD";
+
+			hudObject.name = h.gameObject.name + " health HUD";
+
 			hudObject.transform.parent = transform;
 			HealthHUD hud = hudObject.AddComponent<HealthHUD>();
 			hud.Init(h);
+
+			hud.gameObject.SetActive(h.properties.showHUD);
 
 		}
 	

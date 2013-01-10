@@ -7,9 +7,13 @@ public class HealthHUD : MonoBehaviour {
 
 	Health health;
 
+	public bool shownByDefault { get; private set; }
+
 	public void Init(Health health) {
 
 		this.health = health;
+		health.hud = this;
+		shownByDefault = health.properties.showHUD;
 
 	}
 
@@ -37,4 +41,5 @@ public class HealthHUD : MonoBehaviour {
 		guiTexture.color = Color.Lerp( Color.red, Color.green, healthPercentage );
 	
 	}
+
 }
