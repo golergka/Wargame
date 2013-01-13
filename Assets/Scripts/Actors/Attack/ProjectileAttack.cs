@@ -4,10 +4,12 @@ using System.Collections;
 public class ProjectileAttack : Attack {
 
 	const float FORTYFIVEDEGREES = 0.785398163f; // google, muthafucka
+	const float APPROX_SPEED = 0.2f;
 
 	public Transform projectile;
 	public float spawnDistance = 1f; // distance above the transform to spawn the projectile
 	public float throwForce;
+	public bool upwardTrajectory = true;
 
 	protected override void ApplyDamage() {
 
@@ -29,17 +31,36 @@ public class ProjectileAttack : Attack {
 			return;
 		}
 
+		Vector3 targetPosition = target.transform.position;
+
+		TransformVelocity targetVelocity = target.GetComponent<TransformVelocity>();
+
+		Debug.Log("targetVelocity: " + targetVelocity);
+
+		if (targetVelocity != null) {
+
+			float approxTime = (targetPosition - projectileInstance.transform.position).magnitude / ( APPROX_SPEED * throwForce );
+			Vector3 delta = targetVelocity.velocity * approxTime;
+
+			Debug.DrawLine(target.transform.position, target.transform.position + delta, Color.white, 1f, false );
+			Debug.Log("Approximation delta: " + delta.ToString() );
+
+			targetPosition += delta;
+
+		} else
+			Debug.Log("No targetVelocity component");
+
 		// Algorythm copied from the almighty Wikipedia
 		// http://en.wikipedia.org/wiki/Trajectory_of_a_projectile#Angle_required_to_hit_coordinate_.28x.2Cy.29
 		// Please sent a donation if you're reading this source code. Wikipedia is like super-awesome. Really.
 
 		// TODO: add target current speed to estimate it's position at the time of impact
 		// Will have to do a little trigonometry one day, won't we?
-		Vector3 horizontalDirection = target.transform.position - projectileInstance.transform.position;
+		Vector3 horizontalDirection = targetPosition - projectileInstance.transform.position;
 		horizontalDirection.y = 0; // it has to be normalized later, because we'll need it's magnitude
 
 		float x = horizontalDirection.magnitude; // horizontal direction isn't normalized yet
-		float y = target.transform.position.y - projectileInstance.position.y;
+		float y = targetPosition.y - projectileInstance.position.y;
 
 		float g = Physics.gravity.y;
 		float toRoot = Mathf.Pow(throwForce,4) - g * (g*x*x + 2*y*throwForce*throwForce);
@@ -56,7 +77,10 @@ public class ProjectileAttack : Attack {
 			// TODO: choose the root depending on whether we can shoot directly
 			// Now we just choose the bigger root (the plus in the middle) because that way we're more likely to clear the fence
 			// However, if there's no fence, we probably should choose the smaller root so that projectile hits target faster
-			angle = Mathf.Atan2(throwForce*throwForce + Mathf.Sqrt(toRoot), g*x);
+			if (upwardTrajectory)
+				angle = Mathf.Atan2(throwForce*throwForce + Mathf.Sqrt(toRoot), g*x);
+			else
+				angle = Mathf.Atan2(throwForce*throwForce - Mathf.Sqrt(toRoot), g*x);
 
 		}
 
