@@ -112,20 +112,22 @@ public class PartyController : MonoBehaviour {
 
 		private set {
 
+			if (_partyTarget == value)
+				return;
+
 			if (_partyTarget != null) {
 
 				Health oldHealth = _partyTarget.GetComponent<Health>();
 			
 				if (oldHealth != null) {
 
-					oldHealth.ZeroHealth -= OnZeroHealth;
+					oldHealth.ZeroHealth -= OnTargetZeroHealth;
 
 					HealthHUD hud = oldHealth.hud;
 
 					if (hud != null) {
 
-						if (!hud.shownByDefault)
-							hud.gameObject.SetActive(false);
+						hud.shown = false;
 
 					} else {
 						Debug.LogWarning("Couldn't find health hud!");
@@ -148,13 +150,13 @@ public class PartyController : MonoBehaviour {
 
 				if (newHealth != null) {
 
-					newHealth.ZeroHealth += OnZeroHealth;
+					newHealth.ZeroHealth += OnTargetZeroHealth;
 
 					HealthHUD hud = newHealth.hud;
 
 					if (hud != null) {
 
-						hud.gameObject.SetActive(true);
+						hud.shown = true;
 
 					} else {
 						Debug.LogWarning("Couldn't find healthHUD!");
@@ -177,7 +179,7 @@ public class PartyController : MonoBehaviour {
 
 	Vector3? partyTargetPosition;
 
-	public void OnZeroHealth(Health health) {
+	public void OnTargetZeroHealth(Health health) {
 
 		Stop();
 

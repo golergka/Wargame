@@ -24,8 +24,6 @@ public class HealthHUDManager : MonoBehaviour {
 			HealthHUD hud = hudObject.AddComponent<HealthHUD>();
 			hud.Init(h);
 
-			hud.gameObject.SetActive(h.properties.showHUD);
-
 		}
 	
 	}

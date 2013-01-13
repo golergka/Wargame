@@ -9,6 +9,22 @@ public class HealthHUD : MonoBehaviour {
 
 	public bool shownByDefault { get; private set; }
 
+	private bool _shown;
+	public bool shown {
+		get {
+
+			return ( _shown || shownByDefault);
+
+		}
+
+		set {
+
+			_shown = value;
+
+		}
+
+	}
+
 	public void Init(Health health) {
 
 		this.health = health;
@@ -31,14 +47,22 @@ public class HealthHUD : MonoBehaviour {
 
 		float healthPercentage = (float) health.healthPoints / (float) health.maxHealthPoints;
 
-		Vector3 position = Camera.main.WorldToViewportPoint(health.transform.position);
-		position.x -= (1 - healthPercentage) * xSize/2;
-		transform.position = position;
-		Vector3 scale = transform.localScale;
-		scale.x = healthPercentage * xSize;
-		transform.localScale = scale;
+		if (!shown && healthPercentage == 1f) {
 
-		guiTexture.color = Color.Lerp( Color.red, Color.green, healthPercentage );
+			guiTexture.color = Color.clear;
+
+		} else {
+
+			Vector3 position = Camera.main.WorldToViewportPoint(health.transform.position);
+			position.x -= (1 - healthPercentage) * xSize/2;
+			transform.position = position;
+			Vector3 scale = transform.localScale;
+			scale.x = healthPercentage * xSize;
+			transform.localScale = scale;
+
+			guiTexture.color = Color.Lerp( Color.red, Color.green, healthPercentage );
+
+		}
 	
 	}
 
