@@ -32,21 +32,7 @@ public class Attack : MonoBehaviour, IVisionListener {
 			if (_target == value)
 				return;
 
-			Debug.Log("Old target: " + TargetToString() );
-
-			if (_target != null) {
-				_target.ZeroHealth -= OnTargetZeroHealth;
-				Debug.Log("Not a listener of " + _target.ToString() );
-			}
-
-			if (value != null) {
-				value.ZeroHealth += OnTargetZeroHealth;
-				Debug.Log("Listening to " + value.ToString() );
-			}
-
 			_target = value;
-
-			Debug.Log("New target: " + TargetToString() );
 
 		}
 
@@ -173,18 +159,6 @@ public class Attack : MonoBehaviour, IVisionListener {
 		ApplyDamage();
 		lastAttackTime = Time.time;
 	
-	}
-
-	public void OnTargetZeroHealth(Health health) {
-
-		if (health != target) {
-			Debug.LogError("Expected error message from: " + TargetToString() + " but got from: " + health.ToString() );
-			return;
-		}
-
-		target = null;
-		SendLostTargetMessage();
-
 	}
 
 #endregion
