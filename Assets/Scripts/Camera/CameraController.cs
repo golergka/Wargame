@@ -14,7 +14,10 @@ public class CameraController : MonoBehaviour {
 	
 	public Transform target {
 		get {
-			return PartyController.instance.leader.transform;
+			if (PartyController.instance != null)
+				return PartyController.instance.leader.transform;
+			else
+				return null;
 		}
 	}
 	
