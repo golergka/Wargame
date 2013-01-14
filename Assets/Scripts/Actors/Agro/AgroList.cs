@@ -121,6 +121,9 @@ public class AgroList : MonoBehaviour {
 
 	void OnTakeDamage(Health me, int damageAmount, int agro, MonoBehaviour sender) {
 
+		if (sender.gameObject == this.gameObject)
+			return; // self-anger isn't beneficial
+
 		Health offender = AgroResponsible.GetResponsible(sender).GetComponent<Health>();
 		if (offender == null)
 			return; // we don't anger at forces of nature that are out of our reach
