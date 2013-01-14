@@ -43,7 +43,7 @@ public class Health : MonoBehaviour {
 	[HideInInspector]
 	public HealthHUD hud;
 
-	public event Action<Health, int> TakeDamage;
+	public event Action<Health, int, int, MonoBehaviour> TakeDamage; // damage amount, agro
 	public event Action<Health, int> TakeHealing;
 	public event Action<Health> FullHealth;
 	public event Action<Health> ZeroHealth;
@@ -54,7 +54,7 @@ public class Health : MonoBehaviour {
 	
 	}
 
-	public void InflictDamage(int damageAmount) {
+	public void InflictDamage(int damageAmount, MonoBehaviour sender, float agroMutliplier = 1f ) {
 
 		if ( damageAmount == 0 ) {
 
@@ -78,7 +78,7 @@ public class Health : MonoBehaviour {
 		}
 
 		if (TakeDamage != null)
-			TakeDamage(this, damageAmount);
+			TakeDamage(this, damageAmount, Mathf.RoundToInt( (float) damageAmount * agroMutliplier ), sender);
 
 		if (died)
 			if (ZeroHealth != null)

@@ -3,17 +3,10 @@
 #define VISION_2D
 // #define VISION_3D
 
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
-// Don't remove or add components with this interface in runtime.
-interface IVisionListener {
-
-	void OnNoticed(Visible observee);
-	void OnLost(Visible observee);
-	
-}
 
 public class Vision : MonoBehaviour {
 
@@ -25,6 +18,27 @@ public class Vision : MonoBehaviour {
 				result.Add(v);
 
 		return result;
+
+	}
+
+	public bool IsVisibleInSight(Visible visible) {
+
+		foreach(Visible v in visiblesInSight)
+			if (v != visible)
+				return true;
+
+		return false;
+
+	}
+
+	public bool IsInSight(MonoBehaviour other) {
+
+		Visible visible = other.GetComponent<Visible>();
+
+		if (visible != null)
+			return IsVisibleInSight(visible);
+		else
+			return true; // objects without visibles are always visible
 
 	}
 
@@ -50,30 +64,16 @@ public class Vision : MonoBehaviour {
 
 	public float visionDistanceEditor = 5f;
 
-	Component[] visionListeners;
-
 	void Start() {
 
 		visionDistance = visionDistanceEditor;
-		visionListeners = GetComponents(typeof(IVisionListener));
 
 	}
 
 #region Messaging
 
-	private void SendNoticedMessage(Visible observee) {
-
-		foreach(Component listener in visionListeners)
-			( (IVisionListener)listener ).OnNoticed(observee);
-
-	}
-
-	private void SendLostMessage(Visible observee) {
-
-		foreach(Component listener in visionListeners)
-			( (IVisionListener)listener ).OnLost(observee);
-
-	}
+	public event Action<Vision, Visible> NoticedVisible; // sender, observee
+	public event Action<Vision, Visible> LostVisible; // sender, observee
 
 #endregion
 
@@ -161,13 +161,17 @@ public class Vision : MonoBehaviour {
 
 			RemoveInvisible(visible);
 			AddVisible(visible);
-			SendNoticedMessage(visible);
+
+			if (NoticedVisible != null)
+				NoticedVisible(this, visible);
 
 		} else {
 
 			RemoveVisible(visible);
 			AddInvisible(visible);
-			SendLostMessage(visible);
+			
+			if (LostVisible != null)
+				LostVisible(this, visible);
 
 		}
 
@@ -218,7 +222,9 @@ public class Vision : MonoBehaviour {
 
 				visiblesInSight[i] = null;
 				visible.inRangeOfVisions.Remove(this);
-				SendLostMessage(visible);
+
+				if (LostVisible != null)
+					LostVisible(this, visible);
 
 			}
 
@@ -260,7 +266,9 @@ public class Vision : MonoBehaviour {
 				if (visible.visible) {
 
 					AddVisible(visible);
-					SendNoticedMessage(visible);
+					
+					if (NoticedVisible != null)
+						NoticedVisible(this, visible);
 
 				} else {
 

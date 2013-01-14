@@ -10,7 +10,7 @@ interface IAttackListener {
 
 }
 
-public class Attack : MonoBehaviour, IVisionListener {
+public class Attack : MonoBehaviour {
 
 	private Health _target;
 
@@ -42,6 +42,21 @@ public class Attack : MonoBehaviour, IVisionListener {
 	public float range = 5f;
 	public int damage = 10;
 
+	MonoBehaviour _responsible = null;
+	public MonoBehaviour responsible {
+		get {
+
+			if (_responsible == null)
+				return this;
+			else
+				return _responsible;
+
+		}
+
+		set { _responsible = value; }
+
+	}
+
 #region Messaging
 
 	private Component[] attackListeners;
@@ -50,6 +65,9 @@ public class Attack : MonoBehaviour, IVisionListener {
 	void Start () {
 
 		attackListeners = GetComponents(typeof(IAttackListener));
+		Vision vision = GetComponent<Vision>();
+		if (vision != null)
+			vision.LostVisible += OnLostTarget;
 	
 	}
 
@@ -116,19 +134,13 @@ public class Attack : MonoBehaviour, IVisionListener {
 
 	protected virtual void ApplyDamage() {
 
-		target.InflictDamage( damage );
+		target.InflictDamage( damage, responsible );
 		foreach(Component listener in attackListeners)
 				((IAttackListener)listener).OnApplyDamage();
 
 	}
 
-	public void OnNoticed(Visible observee) {
-
-		// Я сделан из мяса.
-
-	}
-
-	public void OnLost(Visible observee) {
+	public void OnLostTarget(Vision vision, Visible observee) {
 
 		Health target = observee.GetComponent<Health>();
 		if ( target != null && this.target == target ) {

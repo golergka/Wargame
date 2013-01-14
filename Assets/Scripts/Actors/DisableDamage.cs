@@ -44,7 +44,7 @@ public class DisableDamage : MonoBehaviour {
 				
 				float sqrDistance = (v.transform.position - transform.position).sqrMagnitude;
 
-				health.InflictDamage( Mathf.RoundToInt( sqrDistance * (float) damage / vision.sqrVisionDistance ) );
+				health.InflictDamage( Mathf.RoundToInt( sqrDistance * (float) damage / vision.sqrVisionDistance ), this );
 
 			}
 
@@ -52,6 +52,13 @@ public class DisableDamage : MonoBehaviour {
 
 			GameObject destroyer = new GameObject(gameObject.name + " [destroyer]");
 			destroyer.transform.position = transform.position;
+
+			AgroList agroList = GetComponent<AgroList>();
+
+			if (agroList == null || agroList.agroLeader == null)
+				AgroResponsible.MakeResponsible(destroyer, this);
+			else 
+				AgroResponsible.MakeResponsible(destroyer, agroList.agroLeader);
 			
 			Vision destroyerVision = destroyer.AddComponent<Vision>();
 			destroyerVision.visionDistance = range;

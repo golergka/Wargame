@@ -21,6 +21,8 @@ public class ProjectileAttack : Attack {
 		Transform projectileInstance =
 		(Transform) Instantiate(projectile, transform.position + new Vector3(0f, spawnDistance, 0f), transform.rotation);
 
+		AgroResponsible.MakeResponsible(projectileInstance, this);
+
 		if (projectileInstance.rigidbody == null) {
 			Debug.LogWarning("Projectile doesn't have rigidbody!");
 			return;
@@ -35,20 +37,16 @@ public class ProjectileAttack : Attack {
 
 		TransformVelocity targetVelocity = target.GetComponent<TransformVelocity>();
 
-		Debug.Log("targetVelocity: " + targetVelocity);
-
 		if (targetVelocity != null) {
 
 			float approxTime = (targetPosition - projectileInstance.transform.position).magnitude / ( APPROX_SPEED * throwForce );
 			Vector3 delta = targetVelocity.velocity * approxTime;
 
 			Debug.DrawLine(target.transform.position, target.transform.position + delta, Color.white, 1f, false );
-			Debug.Log("Approximation delta: " + delta.ToString() );
 
 			targetPosition += delta;
 
-		} else
-			Debug.Log("No targetVelocity component");
+		}
 
 		// Algorythm copied from the almighty Wikipedia
 		// http://en.wikipedia.org/wiki/Trajectory_of_a_projectile#Angle_required_to_hit_coordinate_.28x.2Cy.29
