@@ -16,7 +16,10 @@ public class Breakable : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision collision) {
 
-		health.InflictDamage( Mathf.RoundToInt(collision.relativeVelocity.magnitude * damageVelocityRatio) );
+		int damage = Mathf.RoundToInt(collision.relativeVelocity.magnitude * damageVelocityRatio);
+
+		if (damage > 0) 
+			health.InflictDamage( damage, this );
 
 	}
 
