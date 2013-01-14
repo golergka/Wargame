@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class AgroResponsible : MonoBehaviour {
 
+	const int MAX_SEEKER_ITERATIONS = 100;
+
 	public GameObject responsible { set; private get; }
 
 	static public GameObject GetResponsible(GameObject accused) {
@@ -15,7 +17,7 @@ public class AgroResponsible : MonoBehaviour {
 		Stack<GameObject> responsibility = new Stack<GameObject>();
 		responsibility.Push(accused);
 
-		while (true) {
+		for(int i=0; i<MAX_SEEKER_ITERATIONS; i++) {
 
 			GameObject oldSuspect = responsibility.Peek();
 
@@ -39,6 +41,9 @@ public class AgroResponsible : MonoBehaviour {
 			responsibility.Push(newSuspect);
 
 		}
+
+		Debug.LogError("Exceeded max seeker iterations!");
+		return null;
 
 	}
 
