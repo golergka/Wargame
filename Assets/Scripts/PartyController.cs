@@ -46,12 +46,6 @@ public class PartyController : MonoBehaviour {
 				if( hero != _leader)
 					hero.Follow(leader.transform);
 			
-		} else {
-			
-			foreach(HeroController hero in heroes)
-				if ( hero != _leader)
-					hero.Stop ();
-			
 		}
 
 	}
