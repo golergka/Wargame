@@ -2,10 +2,10 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections;
 
-[CustomEditor(typeof(CameraController))]
-public class CameraControllerEditor : Editor {
+[CustomEditor(typeof(PerspectiveCameraController))]
+public class PerspectiveCameraControllerEditor : Editor {
 
-	CameraController cameraController;
+	PerspectiveCameraController cameraController;
 	Transform cameraTarget;
 	float cameraDistance {
 		get {
@@ -23,7 +23,7 @@ public class CameraControllerEditor : Editor {
 
 	void OnEnable() {
 
-		cameraController = (CameraController) target;
+		cameraController = (PerspectiveCameraController) target;
 
 	}
 	

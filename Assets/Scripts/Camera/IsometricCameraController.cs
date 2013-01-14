@@ -23,9 +23,6 @@ public class IsometricCameraController : CameraController {
 
 	void OnDrawGizmos() {
 
-		if (target == null)
-			return;
-
 		Gizmos.color = Color.cyan;
 		Gizmos.DrawLine(target.position, targetCamera);
 
