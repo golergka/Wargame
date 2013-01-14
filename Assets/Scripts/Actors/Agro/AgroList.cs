@@ -114,6 +114,8 @@ public class AgroList : MonoBehaviour {
 		}
 
 		health.TakeDamage += OnTakeDamage;
+
+		InvokeRepeating("DecreaseAgro", DECREASE_AGRO_PERIOD, DECREASE_AGRO_PERIOD);
 	
 	}
 
@@ -155,6 +157,19 @@ public class AgroList : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	void DecreaseAgro() {
+
+		lock(unsortedAgroList) {
+
+			Dictionary<Health, int> agroListCopy = new Dictionary<Health, int> (unsortedAgroList);
+
+			foreach( Health h in agroListCopy.Keys )
+				unsortedAgroList[h] = Mathf.Max(0, agroListCopy[h] - DECREASE_AGRO_AMOUNT);
+
+		}
+
 	}
 
 	void OnDrawGizmos() {
