@@ -60,6 +60,9 @@ public class AgroList : MonoBehaviour {
 
 	bool CanBeLeader(Health potentialLeader) {
 
+		if (potentialLeader == null)
+			return false;
+
 		return (vision == null || vision.IsInSight(potentialLeader) );
 
 	}
@@ -128,6 +131,10 @@ public class AgroList : MonoBehaviour {
 		if (offender == null)
 			return; // we don't anger at forces of nature that are out of our reach
 
+		// TODO: Remove this when we're making neutrals!
+		if ( !FriendOrFoe.IsEnemy(this, offender) )
+			return; // we ain't mad at friends
+
 		if (!unsortedAgroList.ContainsKey(offender))
 			unsortedAgroList.Add(offender, agro);
 		else
@@ -139,13 +146,24 @@ public class AgroList : MonoBehaviour {
 
 	void OnNoticed(Vision vision, Visible visible) {
 
+		Debug.Log("Noticed: " + visible.ToString());
+
 		Health potentialLeader = AgroResponsible.GetResponsible(visible).GetComponent<Health>();
 
-		if ( potentialLeader == null || !FriendOrFoe.IsEnemy(this, visible) )
+		if ( potentialLeader == null )
 			return;
+
+		Debug.Log("Potential leader isn't null");
+
+		if ( !FriendOrFoe.IsEnemy(this, visible) )
+			return;
+
+		Debug.Log("He's my enemy");
 
 		if ( !unsortedAgroList.ContainsKey(potentialLeader) )
 			unsortedAgroList.Add(potentialLeader, NEW_MEMBER_AGRO);
+
+		Debug.Log("Added new enemy");
 
 		TryNewLeader(potentialLeader);
 

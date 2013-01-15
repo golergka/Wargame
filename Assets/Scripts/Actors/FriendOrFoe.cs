@@ -5,8 +5,8 @@ public class FriendOrFoe : MonoBehaviour {
 
 	public enum FoFGroup {
 
-		Player,
 		Enemy,
+		Player,
 		Wild, // that's default if an actor doesn't have a FriendOrFoe component
 
 	}
@@ -26,8 +26,14 @@ public class FriendOrFoe : MonoBehaviour {
 
 	public static bool IsEnemy(MonoBehaviour alice, MonoBehaviour bob) {  // it's a commutative operation
 
+		Debug.Log("Alice: " + alice.ToString() );
+		Debug.Log("Bob: " + bob.ToString() );
+
 		FoFGroup aliceGroup = GetFoFGroup(alice);
+		Debug.Log("Alice group: " + aliceGroup);
+
 		FoFGroup bobGroup = GetFoFGroup(bob);
+		Debug.Log("Bob group: " + bobGroup);
 
 		if (aliceGroup == FoFGroup.Wild ||
 			bobGroup == FoFGroup.Wild)
