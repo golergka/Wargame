@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Legs))]
-//[RequireComponent(typeof(Attack))]
 
 public class HeroController : MonoBehaviour {
 
@@ -18,6 +17,9 @@ public class HeroController : MonoBehaviour {
 
 		legs = GetComponent<Legs>();
 		attack = GetComponent<Attack>();
+
+		if (attack == null)
+			Debug.LogWarning("Attack component is required!");
 		
 	}
 

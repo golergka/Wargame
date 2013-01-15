@@ -21,6 +21,13 @@ public class ProjectileAttack : Attack {
 		Transform projectileInstance =
 		(Transform) Instantiate(projectile, transform.position + new Vector3(0f, spawnDistance, 0f), transform.rotation);
 
+		Debug.Log("Instantiated: " + projectileInstance.ToString() );
+
+		// Making jamming objects unstuck in this
+		Jamming jamming = projectileInstance.GetComponent<Jamming>();
+		if (jamming != null)
+			jamming.exceptions.Add(this.transform);
+
 		AgroResponsible.MakeResponsible(projectileInstance, this);
 
 		if (projectileInstance.rigidbody == null) {
@@ -33,7 +40,13 @@ public class ProjectileAttack : Attack {
 			return;
 		}
 
-		Vector3 targetPosition = target.transform.position;
+		Vector3 targetPosition;
+		if (target.rigidbody != null)
+			targetPosition = target.rigidbody.centerOfMass;
+		else if (target.collider != null)
+			targetPosition = target.collider.bounds.center;
+		else
+			targetPosition = target.transform.position;
 
 		TransformVelocity targetVelocity = target.GetComponent<TransformVelocity>();
 
@@ -52,7 +65,6 @@ public class ProjectileAttack : Attack {
 		// http://en.wikipedia.org/wiki/Trajectory_of_a_projectile#Angle_required_to_hit_coordinate_.28x.2Cy.29
 		// Please sent a donation if you're reading this source code. Wikipedia is like super-awesome. Really.
 
-		// TODO: add target current speed to estimate it's position at the time of impact
 		// Will have to do a little trigonometry one day, won't we?
 		Vector3 horizontalDirection = targetPosition - projectileInstance.transform.position;
 		horizontalDirection.y = 0; // it has to be normalized later, because we'll need it's magnitude
@@ -60,14 +72,14 @@ public class ProjectileAttack : Attack {
 		float x = horizontalDirection.magnitude; // horizontal direction isn't normalized yet
 		float y = targetPosition.y - projectileInstance.position.y;
 
-		float g = Physics.gravity.y;
+		float g = -Physics.gravity.y; // not using mass in the equation because we're using VelocityChange later on
 		float toRoot = Mathf.Pow(throwForce,4) - g * (g*x*x + 2*y*throwForce*throwForce);
 
 		float angle;
 
 		if (toRoot < 0) { // checking if we have a solution at all
 
-			Debug.Log("Distance too great, trying 45 degrees");
+			Debug.LogWarning("Distance too great, trying 45 degrees");
 			angle = FORTYFIVEDEGREES;
 
 		} else {
@@ -90,7 +102,7 @@ public class ProjectileAttack : Attack {
 			horizontalDirection.z * throwForce * Mathf.Abs( Mathf.Cos(angle) )
 			);
 
-		projectileInstance.rigidbody.AddForce(throwForceVector , ForceMode.Impulse );
+		projectileInstance.rigidbody.AddForce(throwForceVector , ForceMode.VelocityChange );
 
 	}
 
