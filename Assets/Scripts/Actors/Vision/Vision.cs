@@ -24,7 +24,7 @@ public class Vision : MonoBehaviour {
 	public bool IsVisibleInSight(Visible visible) {
 
 		foreach(Visible v in visiblesInSight)
-			if (v != visible)
+			if (v == visible)
 				return true;
 
 		return false;

@@ -39,7 +39,6 @@ public class AgroList : MonoBehaviour {
 
 		get {
 
-			CheckAgroLeader();
 			return _agroLeader;
 
 		}
@@ -51,7 +50,7 @@ public class AgroList : MonoBehaviour {
 
 			_agroLeader = value;
 
-			if (NewAgroLeader != null)
+			if (value != null && NewAgroLeader != null)
 				NewAgroLeader(this, value);
 
 		}
@@ -146,24 +145,16 @@ public class AgroList : MonoBehaviour {
 
 	void OnNoticed(Vision vision, Visible visible) {
 
-		Debug.Log("Noticed: " + visible.ToString());
-
 		Health potentialLeader = AgroResponsible.GetResponsible(visible).GetComponent<Health>();
 
 		if ( potentialLeader == null )
 			return;
 
-		Debug.Log("Potential leader isn't null");
-
 		if ( !FriendOrFoe.IsEnemy(this, visible) )
 			return;
 
-		Debug.Log("He's my enemy");
-
 		if ( !unsortedAgroList.ContainsKey(potentialLeader) )
 			unsortedAgroList.Add(potentialLeader, NEW_MEMBER_AGRO);
-
-		Debug.Log("Added new enemy");
 
 		TryNewLeader(potentialLeader);
 
@@ -190,6 +181,8 @@ public class AgroList : MonoBehaviour {
 				unsortedAgroList[h] = Mathf.Max(0, agroListCopy[h] - DECREASE_AGRO_AMOUNT);
 
 		}
+
+		CheckAgroLeader();
 
 	}
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Legs))]
-[RequireComponent(typeof(Attack))]
+//[RequireComponent(typeof(Attack))]
 
 public class HeroController : MonoBehaviour {
 

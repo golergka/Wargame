@@ -25,7 +25,13 @@ public class AgroListEditor : Editor {
 				EditorGUILayout.LabelField("Agro list:");
 
 			foreach( KeyValuePair<Health, int> agroListMember in sortedAgroList ) {
-				EditorGUILayout.LabelField(agroListMember.Key.gameObject.name, agroListMember.Value.ToString() );
+
+				GUIStyle style = new GUIStyle();
+
+				if ( agroListMember.Key == agroList.agroLeader)
+					style.fontStyle = FontStyle.Bold;
+
+				EditorGUILayout.LabelField(agroListMember.Key.gameObject.name, agroListMember.Value.ToString(), style );
 			}
 
 		} else {
