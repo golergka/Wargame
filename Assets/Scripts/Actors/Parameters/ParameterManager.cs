@@ -11,6 +11,10 @@ public abstract class Parameter {
 [Serializable]
 public class IntParameter : Parameter {
 
+	public IntParameter(int defaultValue) {
+		value = defaultValue;
+	}
+
 	public int value { get; set; }
 
 	public override string ToString() {
@@ -22,6 +26,10 @@ public class IntParameter : Parameter {
 [Serializable]
 public class FloatParameter : Parameter {
 
+	public FloatParameter(float defaultValue) {
+		value = defaultValue;
+	}
+
 	public float value { get; set; }
 
 	public override string ToString() {
@@ -32,13 +40,16 @@ public class FloatParameter : Parameter {
 
 public class ParameterManager : MonoBehaviour {
 
+	public Dictionary<string, Parameter> parameters;
+
+// These are used to save objects, and are transformed to real Parameters at Awake
+#region Parameter factories
+
 	public List<string> intParameterNames = new List<string>();
-	public List<IntParameter> intParameterBases = new List<IntParameter>();
+	public List<int> intParameterBases = new List<int>();
 
 	public List<string> floatParameterNames = new List<string>();
-	public List<FloatParameter> floatParameterBases = new List<FloatParameter>();
-
-	public Dictionary<string, Parameter> parameters;
+	public List<float> floatParameterBases = new List<float>();
 
 	void Awake() {
 
@@ -55,11 +66,13 @@ public class ParameterManager : MonoBehaviour {
 		}
 
 		for (int i=0; i<intParameterNames.Count; i++)
-			parameters.Add(intParameterNames[i], intParameterBases[i]);
+			parameters.Add(intParameterNames[i], new IntParameter(intParameterBases[i]));
 
 		for (int i=0; i<floatParameterNames.Count; i++)
-			parameters.Add(floatParameterNames[i], floatParameterBases[i]);
+			parameters.Add(floatParameterNames[i], new FloatParameter(floatParameterBases[i]));
 
 	}
+
+#endregion
 
 }
