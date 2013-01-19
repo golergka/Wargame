@@ -13,6 +13,9 @@ public class ParameterManagerEditor : Editor {
 
 	}
 
+	bool showParameters;
+	bool showMissingParameters;
+
 	public override void OnInspectorGUI() {
 
 		if (parameterManager.parameters == null) {
@@ -53,14 +56,24 @@ public class ParameterManagerEditor : Editor {
 			// 	return;
 			// }
 
-
-
 		} else {
 
 			EditorGUILayout.LabelField("Play mode: parameters are immutable");
 
-			foreach(KeyValuePair<string, Parameter> p in parameterManager.parameters)
-				EditorGUILayout.LabelField(p.Key, p.Value.ToString() );
+			showParameters = EditorGUILayout.Foldout(showParameters, "Parameters");
+
+			if (showParameters)
+				foreach(KeyValuePair<string, Parameter> p in parameterManager.parameters)
+					EditorGUILayout.LabelField(p.Key, p.Value.ToString() );
+
+			EditorGUILayout.Space();
+
+			showMissingParameters = EditorGUILayout.Foldout(showMissingParameters,
+				"Missing parameters ( " + parameterManager.missingParameters.Count.ToString() + " )");
+
+			if (showMissingParameters)
+				foreach(string missing in parameterManager.missingParameters)
+					EditorGUILayout.LabelField(missing);
 
 		}
 
