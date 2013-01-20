@@ -143,10 +143,10 @@ public class ParameterManager : MonoBehaviour {
 
 		if (!parameters.ContainsKey(key)) {
 
-			Debug.LogWarning("Parameter not found: " + key);
+			Debug.LogWarning("Parameter not found: " + key + " on object: " + gameObject.name);
 			if (!missingParameters.Contains(key))
 				missingParameters.Add(key);
-					
+
 			return null;
 
 		}
@@ -165,7 +165,7 @@ public class ParameterManager : MonoBehaviour {
 
 	}
 
-	protected void SetParameter<T>(string key, T value) {
+	public void SetParameterValue<T>(string key, T value) {
 
 		if (!parameters.ContainsKey(key)) {
 

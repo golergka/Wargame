@@ -46,8 +46,7 @@ public class Vision : MonoBehaviour {
 	}
 
 	// Vision distance. We keep square distnace to optimize length checks
-	private float _sqrVisionDistance = 100f;
-	public float sqrVisionDistance { get { return _sqrVisionDistance; } }
+	public float sqrVisionDistance { get { return visionDistance*visionDistance; } }
 	
 	public float visionDistance {
 
@@ -62,22 +61,6 @@ public class Vision : MonoBehaviour {
 	void Awake() {
 
 		parameterManager = GetComponent<ParameterManager>();
-
-		Parameter<float> visionDistanceParameter = parameterManager.GetParameter<float>(VISION_DISTANCE_KEY);
-
-		if (visionDistanceParameter != null)
-			visionDistanceParameter.ValueChanged += OnVisionDistanceChange;
-
-	}
-
-	public void OnVisionDistanceChange(Parameter<float> visionDistanceParameter, float visionDistance ) {
-
-		if ( visionDistance > VisibleGrid.instance.gridStep )
-				Debug.LogError("Proposed visionDistance of " + visionDistance +
-					" is bigger than a gridStep of " + VisibleGrid.instance.gridStep );
-		else {
-			_sqrVisionDistance = visionDistance*visionDistance;
-		}
 
 	}
 
@@ -199,14 +182,14 @@ public class Vision : MonoBehaviour {
 	Vector2 observee2d = new Vector2(observee.transform.position.x, observee.transform.position.z);
 	Vector2 position2d = new Vector2(transform.position.x, transform.position.z);
 	Vector2 difference = observee2d - position2d;
-	return (difference.sqrMagnitude < _sqrVisionDistance);
+	return (difference.sqrMagnitude < sqrVisionDistance);
 
 #endif
 
 #if VISION_3D
 
 	Vector3 difference = observee.transform.position - transform.position;
-	return (difference.sqrMagnitude < _sqrVisionDistance);
+	return (difference.sqrMagnitude < sqrVisionDistance);
 
 #endif
 

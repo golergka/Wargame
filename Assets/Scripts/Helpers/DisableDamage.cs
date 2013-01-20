@@ -2,16 +2,41 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(ParameterManager))]
 public class DisableDamage : MonoBehaviour {
 
-	public int damage = 10;
+	public int damage {
+
+		get {
+
+			return parameterManager.GetParameterValue<int>(Attack.DAMAGE_KEY);
+
+		}
+
+	}
 	public float delay = 0f;
 
 	// used if delay is above zero
 
-	public float range = 3f;
+	public float range {
+
+		get {
+
+			return parameterManager.GetParameterValue<float>(Attack.ATTACK_RANGE_KEY);
+
+		}
+
+	}
 
 	bool quitting = false;
+
+	ParameterManager parameterManager;
+
+	void Awake() {
+
+		parameterManager = GetComponent<ParameterManager>();
+
+	}
 
 	void OnApplicationQuit() {
 		quitting = true;
@@ -43,8 +68,12 @@ public class DisableDamage : MonoBehaviour {
 					continue;
 				
 				float sqrDistance = (v.transform.position - transform.position).sqrMagnitude;
+				float damagePercentage = sqrDistance / vision.sqrVisionDistance;
 
-				health.InflictDamage( Mathf.RoundToInt( sqrDistance * (float) damage / vision.sqrVisionDistance ), this );
+				// Debug.DrawLine(transform.position, v.transform.position,
+				// 	Color.Lerp(Color.green, Color.red, damagePercentage), 1f, false);
+
+				health.InflictDamage( Mathf.RoundToInt( ( (float) damage ) * damagePercentage ), this );
 
 			}
 
@@ -62,14 +91,15 @@ public class DisableDamage : MonoBehaviour {
 
 			ParameterManager parameterManager = destroyer.AddComponent<ParameterManager>();
 			parameterManager.parameters.Add(Vision.VISION_DISTANCE_KEY, new Parameter<float>(range));
+			parameterManager.parameters.Add(Attack.ATTACK_RANGE_KEY, new Parameter<float>(range));
+			parameterManager.parameters.Add(Attack.DAMAGE_KEY, new Parameter<int>(damage));
 			
 			destroyer.AddComponent<Vision>();
 
 			TimedDisabler destroyerDisabler = destroyer.AddComponent<TimedDisabler>();
 			destroyerDisabler.lifeTime = delay;
 
-			DisableDamage destroyerDamager = destroyer.AddComponent<DisableDamage>();
-			destroyerDamager.damage = this.damage;
+			destroyer.AddComponent<DisableDamage>();
 
 		}
 
