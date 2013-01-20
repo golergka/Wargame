@@ -59,9 +59,11 @@ public class DisableDamage : MonoBehaviour {
 				AgroResponsible.MakeResponsible(destroyer, this);
 			else 
 				AgroResponsible.MakeResponsible(destroyer, agroList.agroLeader);
+
+			ParameterManager parameterManager = destroyer.AddComponent<ParameterManager>();
+			parameterManager.parameters.Add(Vision.VISION_DISTANCE_KEY, new Parameter<float>(range));
 			
-			Vision destroyerVision = destroyer.AddComponent<Vision>();
-			destroyerVision.visionDistance = range;
+			destroyer.AddComponent<Vision>();
 
 			TimedDisabler destroyerDisabler = destroyer.AddComponent<TimedDisabler>();
 			destroyerDisabler.lifeTime = delay;

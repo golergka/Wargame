@@ -21,7 +21,7 @@ public class ProjectileAttack : Attack {
 		Transform projectileInstance =
 		(Transform) Instantiate(projectile, transform.position + new Vector3(0f, spawnDistance, 0f), transform.rotation);
 
-		Debug.Log("Instantiated: " + projectileInstance.ToString() );
+		//Debug.Log("Instantiated: " + projectileInstance.ToString() );
 
 		// Making jamming objects unstuck in this
 		Jamming jamming = projectileInstance.GetComponent<Jamming>();

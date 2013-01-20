@@ -29,7 +29,7 @@ public class HealthHUD : MonoBehaviour {
 
 		this.health = health;
 		health.hud = this;
-		shownByDefault = health.properties.showHUD;
+		shownByDefault = health.showHUD;
 
 	}
 

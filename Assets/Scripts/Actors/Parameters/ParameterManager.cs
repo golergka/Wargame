@@ -5,43 +5,78 @@ using System.Collections.Generic;
 // It's a stub for a full-on parameter system!
 // THERE BE MONSTERS
 
-// Really, there is A LOT OF CODE DUPLICATION HERE.
-// It might look ugly. I'm sorry.
-// Every sane C# programmer is going to wonder why didn't I use generics for this.
-// But there's a simple explanation: generic parameter class wouldn't be serializable for Unity.
-// Therefore, I COPIED CODE. For float and int parameters.
-// If you'll have to add another parameter type, I pity you.
+[Serializable]
+public abstract class BaseParameter {
+
+	public string key;
+
+	public abstract Parameter CreateParameter();
+
+}
+
+[Serializable]
+public class IntBaseParameter : BaseParameter {
+
+	public int baseValue;
+
+	public IntBaseParameter(string key, int baseValue) {
+		this.key = key;
+		this.baseValue = baseValue;
+	}
+
+	public override Parameter CreateParameter() {
+
+		return new Parameter<int>(baseValue);
+
+	}
+
+}
+
+[Serializable]
+public class FloatBaseParameter : BaseParameter {
+
+	public float baseValue;
+
+	public FloatBaseParameter(string key, float baseValue) {
+		this.key = key;
+		this.baseValue = baseValue;
+	}
+
+	public override Parameter CreateParameter() {
+
+		return new Parameter<float>(baseValue);
+
+	}
+
+}
 
 public abstract class Parameter {
 
 }
 
-[Serializable]
-public class IntParameter : Parameter {
+public class Parameter<T> : Parameter {
 
-	public IntParameter(int defaultValue) {
-		value = defaultValue;
+	private T _currentValue;
+	public T currentValue {
+		get { return _currentValue; }
+		set {
+
+			_currentValue = value;
+
+			if (ValueChanged != null)
+				ValueChanged(this, _currentValue);
+
+		}
 	}
 
-	public int value { get; set; }
+	public event Action<Parameter<T>, T> ValueChanged; // sender, new value
+
+	public Parameter(T defaultValue) {
+		currentValue = defaultValue;
+	}
 
 	public override string ToString() {
-		return value.ToString();
-	}
-
-}
-
-[Serializable]
-public class FloatParameter : Parameter {
-
-	public FloatParameter(float defaultValue) {
-		value = defaultValue;
-	}
-
-	public float value { get; set; }
-
-	public override string ToString() {
-		return value.ToString();
+		return currentValue.ToString();
 	}
 
 }
@@ -50,84 +85,108 @@ public class ParameterManager : MonoBehaviour {
 
 	public Dictionary<string, Parameter> parameters;
 
-	const int DEFAULT_INT_VALUE = 0;
-	const float DEFAULT_FLOAT_VALUE = 0f;
+#region Edit time constructors
+
+	public List<IntBaseParameter> intBaseParameters = new List<IntBaseParameter>();
+	public List<FloatBaseParameter> floatBaseParameters = new List<FloatBaseParameter>();
+
+	void Awake() {
+
+		parameters = new Dictionary<string, Parameter>();
+
+		foreach(IntBaseParameter baseParameter in intBaseParameters) {
+
+			if (parameters.ContainsKey(baseParameter.key)) {
+				Debug.LogWarning("Duplicate key: " + baseParameter.key);
+			} else {
+
+				parameters.Add(baseParameter.key, baseParameter.CreateParameter());
+
+			}
+
+		}
+
+		foreach(FloatBaseParameter baseParameter in floatBaseParameters) {
+
+			if (parameters.ContainsKey(baseParameter.key)) {
+				Debug.LogWarning("Duplicate key: " + baseParameter.key);
+			} else {
+
+				parameters.Add(baseParameter.key, baseParameter.CreateParameter());
+
+			}
+
+		}
+
+	}
+
+#endregion
+
+#region Runtime accessors
 
 	public List<String> missingParameters = new List<String>();
 	// Parameters that have been asked, but wasn't there
 	// For easier tracking of setup failures
 
-	public int GetIntParameter(string key) {
+	public T GetParameterValue<T>(string key) {
+
+		Parameter<T> parameter = GetParameter<T>(key);
+
+		if (parameter == null)
+			return default(T);
+		else
+			return parameter.currentValue;
+
+	}
+
+	public Parameter<T> GetParameter<T>(string key) {
 
 		if (!parameters.ContainsKey(key)) {
 
 			Debug.LogWarning("Parameter not found: " + key);
 			if (!missingParameters.Contains(key))
 				missingParameters.Add(key);
-
-			return DEFAULT_INT_VALUE;
+					
+			return null;
 
 		}
 
 		Parameter parameter = parameters[key];
 
-		if (! (parameter is IntParameter) ) {
-			Debug.LogWarning("Parameter isn't an int: " + key);
-			return DEFAULT_INT_VALUE;
+		if (parameter is Parameter<T>) {
+
+			Parameter<T> typedParameter = (Parameter<T>) parameter;
+			return typedParameter;
+
 		}
 
-		IntParameter intParameter = (IntParameter) parameter;
-		return intParameter.value;
+		Debug.LogError("Unexpected type. Expected " + typeof(Parameter<T>).ToString() + " got " + parameter.GetType() );
+		return null;
 
 	}
 
-	public float GetFloatParameter(string key) {
+	protected void SetParameter<T>(string key, T value) {
 
-		Parameter parameter = parameters[key];
+		if (!parameters.ContainsKey(key)) {
 
-		if (parameter == null) {
-			Debug.LogWarning("Parameter not found: " + key);
-			return DEFAULT_FLOAT_VALUE;
+			parameters.Add(key, new Parameter<T>(value));
+
+		} else {
+
+			Parameter parameter = parameters[key];
+
+			if (parameter is Parameter<T>) {
+
+				Parameter<T> typedParameter = (Parameter<T>) parameter;
+				typedParameter.currentValue = value;
+
+			} else {
+
+				Debug.LogError("Unexpected type. Expected " + typeof(Parameter<T>).ToString() + " got " + parameter.GetType() );
+
+			}
+
 		}
-
-		if (! (parameter is FloatParameter) ) {
-			Debug.LogWarning("Parameter isn't a float: " + key);
-			return DEFAULT_FLOAT_VALUE;
-		}
-
-		FloatParameter flatParameter = (FloatParameter) parameter;
-		return flatParameter.value;
-
-	}
-
-// These are used to save objects, and are transformed to real Parameters at Awake
-#region Parameter factories
-
-	public List<string> intParameterNames = new List<string>();
-	public List<int> intParameterBases = new List<int>();
-
-	public List<string> floatParameterNames = new List<string>();
-	public List<float> floatParameterBases = new List<float>();
-
-	void Awake() {
-
-		parameters = new Dictionary<string, Parameter>();
-
-		if (intParameterBases.Count != intParameterNames.Count) {
-			Debug.LogError("Inconsistent int parameter count!");
-			return;
-		}
-
-		if (floatParameterBases.Count != floatParameterNames.Count) {
-			Debug.LogError("Inconsistent int parameter count!");
-			return;
-		}
-
-		for (int i=0; i<intParameterNames.Count; i++)
-			parameters.Add(intParameterNames[i], new IntParameter(intParameterBases[i]));
-
-		for (int i=0; i<floatParameterNames.Count; i++)
-			parameters.Add(floatParameterNames[i], new FloatParameter(floatParameterBases[i]));
 
 	}
 

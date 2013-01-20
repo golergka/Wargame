@@ -2,14 +2,25 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections;
 
-//[CustomEditor(typeof(Vision))]
+[CustomEditor(typeof(Vision))]
 public class VisionEditor : Editor {
 
-	Vision vision;
+	FloatBaseParameter visionDistanceParameter;
 
 	void OnEnable() {
 
-		vision = (Vision) target;
+		Vision vision = (Vision) target;
+		ParameterManager parameterManager = vision.GetComponent<ParameterManager>();
+
+		foreach(FloatBaseParameter floatBaseParameter in parameterManager.floatBaseParameters) {
+			if (floatBaseParameter.key == Vision.VISION_DISTANCE_KEY) {
+				visionDistanceParameter = floatBaseParameter;
+				return;
+			}
+		}
+
+		visionDistanceParameter = new FloatBaseParameter(Vision.VISION_DISTANCE_KEY, default(float) );
+		parameterManager.floatBaseParameters.Add( visionDistanceParameter );
 
 	}
 
@@ -20,7 +31,7 @@ public class VisionEditor : Editor {
 			return;
 		}
 
-		vision.visionDistance = EditorGUILayout.Slider(vision.visionDistance, 0, VisibleGrid.instance.gridStep);
+		visionDistanceParameter.baseValue = EditorGUILayout.Slider(visionDistanceParameter.baseValue, 0, VisibleGrid.instance.gridStep);
 		
 	}
 

@@ -2,42 +2,45 @@ using System;
 using UnityEngine;
 using System.Collections;
 
-[Serializable]
-public class HealthProperties {
-
-	public int maxHealthPoints = 100;
-	public bool showHUD = true;
-
-}
-
+[RequireComponent(typeof(ParameterManager))]
 public class Health : MonoBehaviour {
-
-	// Public only for editor use
-	public HealthProperties properties;
 
 	public int healthPoints { get; private set; }
 
+	public bool showHUD = true;
+
+	public const string MAX_HEALTH_POINTS_KEY = "Max health points";
+
 	public int maxHealthPoints {
 
-		get { return properties.maxHealthPoints; }
+		get { return parameterManager.GetParameterValue<int>(MAX_HEALTH_POINTS_KEY); }
 
-		set {
+	}
 
-			if (properties.maxHealthPoints == value)
-				return;
+	ParameterManager parameterManager;
 
-			properties.maxHealthPoints = value;
+	void Awake() {
 
-			if ( healthPoints >= value ) {
+		parameterManager = GetComponent<ParameterManager>();
+
+		Parameter<int> maxHealthPointsParameter = parameterManager.GetParameter<int>(MAX_HEALTH_POINTS_KEY);
+
+		if (maxHealthPointsParameter != null)
+			maxHealthPointsParameter.ValueChanged += OnMaxHealthPointsChange;
+
+	}
+
+	public void OnMaxHealthPointsChange(Parameter<int> maxHealthPointsParameter, int value) {
+
+		if ( healthPoints >= value ) {
 				
-				healthPoints = value;
+			healthPoints = value;
 
-				if (FullHealth != null)
-					FullHealth(this);
-
-			}
+			if (FullHealth != null)
+				FullHealth(this);
 
 		}
+
 	}
 
 	[HideInInspector]

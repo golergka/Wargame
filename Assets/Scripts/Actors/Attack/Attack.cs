@@ -10,6 +10,7 @@ interface IAttackListener {
 
 }
 
+[RequireComponent(typeof(ParameterManager))]
 public class Attack : MonoBehaviour {
 
 	private Health _target;
@@ -38,9 +39,27 @@ public class Attack : MonoBehaviour {
 
 	}
 
-	public float period = 1f;
-	public float range = 5f;
-	public int damage = 10;
+	public const string ATTACK_PERIOD_KEY = "Attack period";
+	public const string ATTACK_RANGE_KEY  = "Attack range";
+
+	public float period {
+
+		get {
+
+			return parameterManager.GetParameterValue<float>(ATTACK_PERIOD_KEY);
+
+		}
+
+	}
+	public float range {
+
+		get {
+
+			return parameterManager.GetParameterValue<float>(ATTACK_RANGE_KEY);
+
+		}
+
+	}
 
 	MonoBehaviour _responsible = null;
 	public MonoBehaviour responsible {
@@ -54,6 +73,14 @@ public class Attack : MonoBehaviour {
 		}
 
 		set { _responsible = value; }
+
+	}
+
+	ParameterManager parameterManager;
+
+	void Awake() {
+
+		parameterManager = GetComponent<ParameterManager>();
 
 	}
 
@@ -131,6 +158,18 @@ public class Attack : MonoBehaviour {
 #region Performing attack
 
 	float lastAttackTime = 0;
+
+	public const string DAMAGE_KEY = "Damage";
+
+	int damage {
+
+		get {
+
+			return parameterManager.GetParameterValue<int>(DAMAGE_KEY);
+
+		}
+
+	}
 
 	protected virtual void ApplyDamage() {
 

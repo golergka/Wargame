@@ -3,37 +3,27 @@ using System;
 using System.Collections;
 using Pathfinding;
 
-[Serializable]
-public class LegsProperties {
-
-	public float speed = 1f;
-	public float targetReach = 0.5f;
-	public float targetTransformReach = 3f;
-
-}
-
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(ParameterManager))]
 [RequireComponent(typeof(Seeker))]
 public class Legs : MonoBehaviour {
 	
 #region Public setup
 
-	public LegsProperties properties;
+	ParameterManager parameterManager;
+
 	public float speed {
 		get {
-			return properties.speed;
+			return parameterManager.GetParameterValue<float>("Speed");
 		}
 	}
 	// reach to use for waypoints and Vector3 targets
-	public float targetReach {
-		get {
-			return properties.targetReach;
-		}
-	}
+	public float targetReach = 0.5f;
+
 	// reach to use for Transform targets
 	public float targetTransformReach {
 		get {
-			return properties.targetTransformReach;
+			return parameterManager.GetParameterValue<float>("Attack range");
 		}
 	}
 	
@@ -114,6 +104,7 @@ public class Legs : MonoBehaviour {
 	
 	void Awake() {
 		
+		parameterManager = GetComponent<ParameterManager>();
 		seeker = GetComponent<Seeker>();
 		characterController = GetComponent<CharacterController>();
 		animator = GetComponent<Animator>();

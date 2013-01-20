@@ -8,7 +8,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(ParameterManager))]
 public class Vision : MonoBehaviour {
+
+	public const string VISION_DISTANCE_KEY = "Vision distance";
 
 	public List<Visible> VisiblesInSight() {
 
@@ -45,28 +48,36 @@ public class Vision : MonoBehaviour {
 	// Vision distance. We keep square distnace to optimize length checks
 	private float _sqrVisionDistance = 100f;
 	public float sqrVisionDistance { get { return _sqrVisionDistance; } }
-	private float _visionDistance = 10f;
+	
 	public float visionDistance {
 
-		get { return _visionDistance; }
-		set {
-
-			if ( value > VisibleGrid.instance.gridStep )
-				Debug.LogError("Proposed visionDistance of " + visionDistance +
-					" is bigger than a gridStep of " + VisibleGrid.instance.gridStep.ToString() );
-			else {
-				_visionDistance = value;
-				_sqrVisionDistance = value*value;
-			}
+		get {
+			return parameterManager.GetParameterValue<float>(VISION_DISTANCE_KEY);
 		}
 
 	}
 
-	public float visionDistanceEditor = 5f;
+	ParameterManager parameterManager;
 
-	void Start() {
+	void Awake() {
 
-		visionDistance = visionDistanceEditor;
+		parameterManager = GetComponent<ParameterManager>();
+
+		Parameter<float> visionDistanceParameter = parameterManager.GetParameter<float>(VISION_DISTANCE_KEY);
+
+		if (visionDistanceParameter != null)
+			visionDistanceParameter.ValueChanged += OnVisionDistanceChange;
+
+	}
+
+	public void OnVisionDistanceChange(Parameter<float> visionDistanceParameter, float visionDistance ) {
+
+		if ( visionDistance > VisibleGrid.instance.gridStep )
+				Debug.LogError("Proposed visionDistance of " + visionDistance +
+					" is bigger than a gridStep of " + VisibleGrid.instance.gridStep );
+		else {
+			_sqrVisionDistance = visionDistance*visionDistance;
+		}
 
 	}
 
